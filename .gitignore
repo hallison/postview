@@ -1,0 +1,5 @@
+.*.sw[p-z]
+*.tmp
+test.*
+posts
+

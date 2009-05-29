@@ -1,0 +1,12 @@
+[Postview] is a simple [_blogware_](http://en.wikipedia.org/wiki/Blog_engine) written in [Ruby] using [Sinatra] framework
+that renders files written in [Markdown].
+
+* Easy to configure.
+* Easy to synchronize.
+
+Fork the project and try.
+
+[Postview]
+[Sinatra]:http://www.sinatrarb.com/
+[Ruby]:http://www.ruby-lang.org/
+
