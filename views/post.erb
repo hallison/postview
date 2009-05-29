@@ -1,0 +1,15 @@
+<div class="post">
+
+  <h1 id="post-title"><a href="<%= post[:path] %>"><%= post[:title] %></a></h1> 
+
+  <span id="post-publish">By <%= site.about[:author] %>, published at <%= post[:publish_date] %>, tagged with <%= post[:tags].collect{|name, path| "<a href='#{path}'>#{name}</a>"}.join(', ') %></span>
+
+  <div id="post-content">
+    <%= post[:content]  %>
+  </div><!--post-content-->
+
+  <div id="post-metadata">
+  </div><!--post-metadata-->
+
+</div><!--post-->
+

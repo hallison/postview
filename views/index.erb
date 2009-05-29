@@ -1,0 +1,17 @@
+<% for post in posts %>
+<div>
+
+<h2><a href="<%= post[:path] %>"><%= post[:title] %></a></h2> 
+
+<span>By <%= site.about[:author] %>, published at <%= post[:publish_date] %>, tagged with <%= post[:tags].collect{|name, path| "<a href='#{path}'>#{name}</a>"}.join(', ') %></span>
+
+<div>
+
+<%= post[:summary] %>
+
+</div>
+
+</div><!--post-->
+
+<% end %>
+

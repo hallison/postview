@@ -1,0 +1,8 @@
+<h1>Posts tagged with <%= tag %></h1>
+
+<ul>
+<% for post in posts %>
+  <li><a href="<%= post[:path] %>"><%= post[:title] %></a></li>
+<% end %>
+</ul>
+

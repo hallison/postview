@@ -1,0 +1,8 @@
+<h1><%= site.paths[:search].capitalize %></h1>
+
+<ul>
+<% for post in posts %>
+  <li><a href="<%= post[:path] %>"><strong><%= post[:title] %></strong></a></li>
+<% end %>
+</ul>
+

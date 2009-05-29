@@ -1,0 +1,8 @@
+<h1><%= site.paths[:tags].capitalize %></h1>
+
+<ul>
+<% for tag, path in site.tags %>
+  <li><a href="<%= path %>"><%= tag %></a></li>
+<% end %>
+</ul>
+

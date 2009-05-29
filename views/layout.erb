@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title><%= site.about[:title] %> :: <%= page[:title] %></title>
+  <meta name="generator"   content="Postview" />
+  <meta name="description" content="<%= site.about[:subtitle] %>" />
+  <meta name="keywords"    content="<%= page[:keywords] %>" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/postview.css" />
+</head>
+
+<body>
+
+<div><!-- header -->
+
+  <h1><a href="<%= site.about[:url] %>"><%= site.about[:title] %></a></h1>
+  <p>By <a href="mailto:<%= site.about[:email] %>"><%= site.about[:author] %></a></p>
+  <p><%= site.about[:subtitle] %></p>
+
+</div><!-- header -->
+
+<div><!-- global navigation -->
+
+<address>
+
+  <a href="<%= site.about[:url] %>" title="<%= site.about[:title] %>">Home</a>
+
+  <a href="/<%= site.paths[:tags]%>" title="All tags">Tags</a>
+
+  <a href="/<%= site.paths[:archive] %>" title="Archive">Archive</a>
+
+</address>
+
+</div><!-- global navigation -->
+
+<div><!-- content -->
+
+<%= yield %>
+
+</div><!-- content -->
+
+<div><!-- options -->
+
+  <div>
+    
+    <h2>Search</h2>
+
+    <form action="/search" method="get">
+      <input type="text" name="keyword" />
+    </form>
+
+  </div>
+
+</div>
+
+<div><!-- footer -->
+
+  <%= site.about[:title] %> is proudly using the <a href="http://github.com/hallison/weblooks">Weblooks theme</a>
+  originally designed by <a href="http://hallisonbatista.com">Hallison Batista</a>.
+  Powered by <a href="http://github.com/hallison/postview">Postview</a>
+
+</div><!-- footer -->
+
+</body>
+
+</html>
+
