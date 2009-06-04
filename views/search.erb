@@ -1,8 +1,40 @@
-<h1><%= site.paths[:search].capitalize %></h1>
+<div class="entry">
+
+<h1><%= paths[:search].capitalize %> - Results for <%= params.values.to_s.split.join(', ') %></h1>
+
+<div class="text">
+
+<p>
+<%= posts.size %> found in posts and <%= archive.size %> found in archive.
+</p>
+
+<% unless posts.empty? %>
+<h2><%= title_to :posts %></h2>
 
 <ul>
 <% for post in posts %>
-  <li><a href="<%= post[:path] %>"><strong><%= post[:title] %></strong></a></li>
+<li>
+  <%= post.publish_date.strftime('%Y-%m-%d') %> - <strong><a href="<%= path_to :posts, post %>"><%= post.title %></a></strong>
+  <span>(<%= post.tags.collect{|tag| "<a href='#{path_to :tags, tag}'>#{tag}</a>"}.join(', ') %>)</span>
+</li>
 <% end %>
 </ul>
+<% end %>
+
+<% unless archive.empty? %>
+<h2><%= title_to :archive %></h2>
+
+<ul>
+<% for post in archive %>
+<li>
+  <%= post.publish_date.strftime('%Y-%m-%d') %> - <strong><a href="<%= path_to :archive, post %>"><%= post.title %></a></strong>
+  <span>(<%= post.tags.collect{|tag| "<a href='#{path_to :archive}#{path_to :tags, tag}'>#{tag}</a>"}.join(', ') %>)</span>
+</li>
+<% end %>
+</ul>
+<% end %>
+
+</div>
+
+</div>
 

@@ -2,63 +2,76 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   
 <head>
+
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title><%= site.about[:title] %> :: <%= page[:title] %></title>
+  <title><%= site.title %> :: <%= page[:title] %></title>
   <meta name="generator"   content="Postview" />
-  <meta name="description" content="<%= site.about[:subtitle] %>" />
+  <meta name="description" content="<%= site.subtitle %>" />
   <meta name="keywords"    content="<%= page[:keywords] %>" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/postview.css" />
+  <link rel="stylesheet" type="text/css" href="<%= path_to :stylesheets, 'postview.css' %>" />
+
 </head>
 
 <body>
 
-<div><!-- header -->
+<div id="header">
 
-  <h1><a href="<%= site.about[:url] %>"><%= site.about[:title] %></a></h1>
-  <p>By <a href="mailto:<%= site.about[:email] %>"><%= site.about[:author] %></a></p>
-  <p><%= site.about[:subtitle] %></p>
+  <h1><a href="<%= site.url %>"><%= site.title %></a></h1>
+  <h2><%= page[:title] || site.subtitle %></h2>
+  <p>By <a href="mailto:<%= site.email %>"><%= site.author %></a></p>
 
 </div><!-- header -->
 
-<div><!-- global navigation -->
+<br/>
+
+<div id="navigation-bar">
 
 <address>
 
-  <a href="<%= site.about[:url] %>" title="<%= site.about[:title] %>">Home</a>
-
-  <a href="/<%= site.paths[:tags]%>" title="All tags">Tags</a>
-
-  <a href="/<%= site.paths[:archive] %>" title="Archive">Archive</a>
+  <a href="<%= site.url %>" title="<%= site.title %>">Home</a>
+  <a href="<%= path_to :tags %>" title="All tags"><%= title_to :tags %></a>
+  <a href="<%= path_to :archive %>" title="Archive"><%= title_to :archive %></a>
+  <a href="<%= path_to :about %>" title="About"><%= title_to :about %></a>
 
 </address>
 
-</div><!-- global navigation -->
+<form action="<%= path_to :search %>" method="get">
+  <input type="text" name="keyword" value="<%= title_to :search %>" onfocus="this.value=''" onblur="this.value='<%= title_to :search %>'"/>
+</form>
 
-<div><!-- content -->
+</div><!-- navigation-bar -->
+
+<br/>
+
+<div id="content">
 
 <%= yield %>
 
 </div><!-- content -->
 
-<div><!-- options -->
+<div id="options">
 
-  <div>
-    
-    <h2>Search</h2>
+  <div class="entry">
 
-    <form action="/search" method="get">
-      <input type="text" name="keyword" />
-    </form>
+    <h1><%= title_to :tags %></h1>
+
+    <ul>
+    <% for tag in tags %>
+      <li><a href="<%= path_to :tags, tag %>" title="<%= title_to tag %>"><%= title_to tag %></a></li>
+    <% end %>
+    </ul>
 
   </div>
 
-</div>
+</div><!-- options -->
 
-<div><!-- footer -->
+<br/>
 
-  <%= site.about[:title] %> is proudly using the <a href="http://github.com/hallison/weblooks">Weblooks theme</a>
-  originally designed by <a href="http://hallisonbatista.com">Hallison Batista</a>.
-  Powered by <a href="http://github.com/hallison/postview">Postview</a>
+<div id="footer">
+
+<p>
+  <small><%= site.title %> powered by <a href="http://hallison.github.com/postview">Postview</a></small>
+</p>
 
 </div><!-- footer -->
 

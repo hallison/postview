@@ -1,5 +1,5 @@
 .*.sw[p-z]
+.session
 *.tmp
 test.*
 posts
-

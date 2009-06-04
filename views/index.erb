@@ -1,17 +1,23 @@
 <% for post in posts %>
-<div>
+<div class="entry">
 
-<h2><a href="<%= post[:path] %>"><%= post[:title] %></a></h2> 
+<h1>
+  <a href="<%= path_to :posts, post %>"><%= post.title %></a>
+</h1> 
 
-<span>By <%= site.about[:author] %>, published at <%= post[:publish_date] %>, tagged with <%= post[:tags].collect{|name, path| "<a href='#{path}'>#{name}</a>"}.join(', ') %></span>
+<span class="entry-meta">Published at <%= post.publish_date.strftime('%A, %B %d, %Y') %>, tagged with <%= post.tags.collect{|tag| "<a href='#{path_to :tags, tag}'>#{tag}</a>"}.join(', ') %>.</span>
 
-<div>
+<div class="text">
 
-<%= post[:summary] %>
+<%= post.summary %>
+
+<p>
+<a href="<%= path_to :posts, post %>">Read more ...</a>
+</p>
 
 </div>
 
-</div><!--post-->
 
+</div>
 <% end %>
 

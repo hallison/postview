@@ -1,15 +1,14 @@
-<div class="post">
+<div class="entry">
 
-  <h1 id="post-title"><a href="<%= post[:path] %>"><%= post[:title] %></a></h1> 
+<h1><a href="<%= path_to :posts, post %>"><%= post.title %></a></h1> 
 
-  <span id="post-publish">By <%= site.about[:author] %>, published at <%= post[:publish_date] %>, tagged with <%= post[:tags].collect{|name, path| "<a href='#{path}'>#{name}</a>"}.join(', ') %></span>
+<span class="entry-meta">Published at <%= post.publish_date.strftime('%A, %B %d, %Y') %>, tagged with <%= post.tags.collect{ |tag| "<a href='#{path_to :tags, tag}'>#{tag}</a>"}.join(', ') %>.</span>
 
-  <div id="post-content">
-    <%= post[:content]  %>
-  </div><!--post-content-->
+<div class="text">
 
-  <div id="post-metadata">
-  </div><!--post-metadata-->
+<%= post.content  %>
 
-</div><!--post-->
+</div>
+
+</div>
 

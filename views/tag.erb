@@ -1,8 +1,15 @@
+<div class="entry">
+
 <h1>Posts tagged with <%= tag %></h1>
 
 <ul>
 <% for post in posts %>
-  <li><a href="<%= post[:path] %>"><%= post[:title] %></a></li>
+<li>
+  <%= post.publish_date.strftime('%Y-%m-%d') %> - <strong><a href="<%= path_to :posts, post %>"><%= post.title %></a></strong>
+  <span>(<%= post.tags.collect{|tag| "<a href='#{path_to :tags, tag}'>#{tag}</a>"}.join(', ') %>)</span>
+</li>
 <% end %>
 </ul>
+
+</div>
 

@@ -18,3 +18,9 @@ class Hash
   end
 end
 
+class Array
+  def limit(size)
+    self[0..size]
+  end
+end
+
