@@ -2,11 +2,35 @@ module Postview
 
 class Settings
 
-  attr_reader :about, :directories, :paths
+  attr_reader :site, :directories, :mapping
 
   def initialize(file_name)
     YAML.load_file(file_name).symbolize_keys.instance_variables_set_to(self)
   end
+
+  def build_site
+    build_all_finders_for(Site.new(site))
+  end
+
+  def build_all_finders_for(site)
+    site.find          = build_finder_for(:posts)
+    site.find_archived = build_finder_for(:archive)
+    site
+  end
+
+  def build_finder_for(directory)
+    Finder.new(file_names_for(directory))
+  end
+
+  def build_mapping
+    Mapping.new(mapping)
+  end
+
+  def self.load
+    new(SETTINGS)
+  end
+
+private
 
   def file_names_for(directory, pattern = "**.*")
     Dir[File.join(directory_for(directory), pattern)]
@@ -15,14 +39,6 @@ class Settings
   def directory_for(name)
     return directories[name] if directories[name].match(%r{^/.*})
     File.join(PATH, directories[name])
-  end
-
-  def build_site
-    Site.new(self)
-  end
-
-  def self.load
-    new(SETTINGS)
   end
 
 end # class Settings

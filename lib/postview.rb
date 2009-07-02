@@ -5,17 +5,35 @@ module Postview
   PATH     = File.expand_path(File.join(File.dirname(__FILE__), '..'))
   SETTINGS = File.join(PATH, *%w(config settings.yml))
 
-  %w(rubygems sinatra/base erb maruku rake ruby-debug).collect do |dependency|
+  %w(rubygems sinatra/base ostruct erb maruku rake ruby-debug).collect do |dependency|
     require dependency
   end
 
   require 'extensions'
 
   autoload :Settings,    'postview/settings'
-  autoload :Finder,      'postview/finder'
+  autoload :Mapping,     'postview/mapping'
   autoload :Site,        'postview/site'
+  autoload :Finder,      'postview/finder'
   autoload :Post,        'postview/post'
   autoload :Application, 'postview/application'
+
+  class << self
+
+    def version
+      [ 0, 2, 0, nil ].compact.join('.')
+    end
+
+    def tagged
+      "Alpha Release"
+    end
+
+    def to_s
+      "#{self.name} v#{version} (#{tagged})"
+    end
+    alias :info :to_s
+
+  end
 
 end # module Postview
 

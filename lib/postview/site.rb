@@ -3,14 +3,12 @@ module Postview
   class Site
 
     # Attributes to application.
-    attr_reader :title, :subtitle, :author, :email
-    attr_reader :find, :find_archived
+    attr_reader   :title, :subtitle, :author, :email
     attr_accessor :url
+    attr_accessor :find, :find_archived
 
-    def initialize(settings)
-      settings.about.instance_variables_set_to(self)
-      @find          = Finder.new(settings.file_names_for(:posts))
-      @find_archived = Finder.new(settings.file_names_for(:archive))
+    def initialize(attributes = {})
+      attributes.instance_variables_set_to(self)
     end
 
   end # class Site

@@ -4,11 +4,11 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title><%= site.title %> :: <%= page[:title] %></title>
+  <title><%= site.title %> :: <%= page.title %></title>
   <meta name="generator"   content="Postview" />
   <meta name="description" content="<%= site.subtitle %>" />
-  <meta name="keywords"    content="<%= page[:keywords] %>" />
-  <link rel="stylesheet" type="text/css" href="<%= path_to :stylesheets, 'postview.css' %>" />
+  <meta name="keywords"    content="<%= page.keywords %>" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/postview.css" />
 
 </head>
 
@@ -17,7 +17,7 @@
 <div id="header">
 
   <h1><a href="<%= site.url %>"><%= site.title %></a></h1>
-  <h2><%= page[:title] || site.subtitle %></h2>
+  <h2><%= page.title || site.subtitle %></h2>
   <p>By <a href="mailto:<%= site.email %>"><%= site.author %></a></p>
 
 </div><!-- header -->
@@ -28,7 +28,7 @@
 
 <address>
 
-  <a href="<%= site.url %>" title="<%= site.title %>">Home</a>
+  <a href="<%= path_to :root %>" title="<%= site.title %>">Home</a>
   <a href="<%= path_to :tags %>" title="All tags"><%= title_to :tags %></a>
   <a href="<%= path_to :archive %>" title="Archive"><%= title_to :archive %></a>
   <a href="<%= path_to :about %>" title="About"><%= title_to :about %></a>

@@ -1,6 +1,6 @@
-about:
+site:
   title: Postview
-  subtitle: Post your articles.
+  subtitle: Post your articles
   author: Jack Ducklet
   email: jack.ducklet@example.com
   url: http://jackd.example.com/
@@ -8,7 +8,8 @@ directories:
   posts: test/fixtures/posts
   archive: test/fixtures/posts/archive
   drafts: test/fixtures/posts/drafts
-paths:
+mapping:
+#  root: test
   posts: posts
   tags: tags
   archive: archive

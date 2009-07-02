@@ -7,9 +7,9 @@ class TestSettings < Test::Unit::TestCase
 
   def setup
     @attributes = {
-      :about => {
+      :site => {
         :title    => "Postview",
-        :subtitle => "Post your articles.",
+        :subtitle => "Post your articles",
         :author   => "Jack Ducklet",
         :email    => "jack.ducklet@example.com",
         :url      => "http://jackd.example.com/"
@@ -19,7 +19,7 @@ class TestSettings < Test::Unit::TestCase
         :archive => "test/fixtures/posts/archive",
         :drafts  => "test/fixtures/posts/drafts"
       },
-      :paths => {
+      :mapping => {
         :posts   => "posts",
         :tags    => "tags",
         :archive => "archive",
@@ -39,8 +39,7 @@ class TestSettings < Test::Unit::TestCase
   end
 
   def test_should_build_site
-    site = @settings.build_site
-    assert_not_nil site
+    assert_not_nil @settings.build_site
   end
 end
 

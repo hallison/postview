@@ -1,4 +1,4 @@
-about:
+site:
   title: Postview
   subtitle: Post your articles
   author: You
@@ -8,7 +8,11 @@ directories:
   posts: posts
   archive: posts/archive
   drafts: posts/drafts
-paths:
+# Set routes for your site
+# The root route most be empty if point to "/". If your site is a sub-domain, e.g. blog/, then
+# set root value root to /blog.
+mapping:
+#  root:
   posts: posts
   tags: tags
   archive: archive
