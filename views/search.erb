@@ -28,7 +28,7 @@
 <% for post in archive %>
 <li>
   <%= post.publish_date.strftime('%Y-%m-%d') %> - <strong><a href="<%= path_to :archive, post %>"><%= post.title %></a></strong>
-  <span>(<%= post.tags.collect{|tag| "<a href='#{path_to :archive}#{path_to :tags, tag}'>#{tag}</a>"}.join(', ') %>)</span>
+  <span>(<%= post.tags.collect{|tag| "<a href='#{path_to :archive, :tags, tag}'>#{tag}</a>"}.join(', ') %>)</span>
 </li>
 <% end %>
 </ul>

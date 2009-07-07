@@ -41,5 +41,11 @@ class TestSettings < Test::Unit::TestCase
   def test_should_build_site
     assert_not_nil @settings.build_site
   end
+
+  def test_should_rescue_exception_for_file_not_found
+    assert_raise Postview::Settings::FileError do
+      Postview::Settings.new("file/not/found.yml")
+    end
+  end
 end
 

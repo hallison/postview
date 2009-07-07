@@ -2,9 +2,16 @@ module Postview
 
 class Settings
 
+  class FileError < Errno::ENOENT
+     def self.message
+       "#{Postview}: #{$!}"
+     end
+  end
+
   attr_reader :site, :directories, :mapping
 
   def initialize(file_name)
+    raise FileError unless File.exist? file_name
     YAML.load_file(file_name).symbolize_keys.instance_variables_set_to(self)
   end
 
@@ -15,6 +22,7 @@ class Settings
   def build_all_finders_for(site)
     site.find          = build_finder_for(:posts)
     site.find_archived = build_finder_for(:archive)
+    site.find_drafted  = build_finder_for(:drafts)
     site
   end
 

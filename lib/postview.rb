@@ -21,11 +21,11 @@ module Postview
   class << self
 
     def version
-      [ 0, 2, 0, nil ].compact.join('.')
+      [ 0, 3, 0, nil ].compact.join('.')
     end
 
     def tagged
-      "Alpha Release"
+      "Beta Release"
     end
 
     def to_s

@@ -1,14 +1,23 @@
+<% for post in posts %>
 <div class="entry">
 
-<h1><a href="<%= path_to url, post %>"><%= post.title %></a></h1> 
+<h1>
+  <a href="<%= path_to url, post %>"><%= post.title %></a>
+</h1> 
 
 <span class="entry-meta">Published at <%= post.publish_date.strftime('%A, %B %d, %Y') %>, tagged with <%= post.tags.join(', ') %>.</span>
 
 <div class="text">
 
-<%= post.content  %>
+<%= post.summary %>
+
+<p>
+<a href="<%= path_to url, post %>">Read more ...</a>
+</p>
 
 </div>
 
+
 </div>
+<% end %>
 

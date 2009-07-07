@@ -5,8 +5,7 @@ require 'lib/postview'
 class TestSite < Test::Unit::TestCase
 
   def setup
-    @settings = Postview::Settings.new("#{Postview::PATH}/test/fixtures/settings.yml")
-    @site = @settings.build_site
+    @site = Postview::Settings.new("#{Postview::PATH}/test/fixtures/settings.yml").build_site
   end
 
   def test_check_attributes
@@ -36,6 +35,13 @@ class TestSite < Test::Unit::TestCase
     assert 2, @site.find_archived.all_posts.size
     @site.find_archived.all_posts.collect do |post|
       assert_match %r{\d{4}\d{4}-(\.*)\.*}, post.file
+    end
+  end
+
+  def test_should_find_all_drafts
+    assert 1, @site.find_drafted.all_posts.size
+    @site.find_drafted.all_posts.collect do |draft|
+      assert_match %r{\d{4}\d{4}-(\.*)\.*}, draft.file
     end
   end
 

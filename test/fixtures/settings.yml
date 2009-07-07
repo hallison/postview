@@ -13,6 +13,7 @@ mapping:
   posts: posts
   tags: tags
   archive: archive
+  drafts: drafts
   search: search
   about: about
 

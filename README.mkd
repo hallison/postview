@@ -1,10 +1,17 @@
-# Postview - Just write ...
+# Postview - Just write your posts ...
 
-[Postview](http://github.com/hallison/postview/) is a simple [_blogware_](http://en.wikipedia.org/wiki/Blog_engine) written in [Ruby](http://www.ruby-lang.org/) using [Sinatra](http://www.sinatrarb.com/) framework
-that renders files written in [Markdown](http://daringfireball.net/projects/markdown/).
+[Postview][] is a simple [_blogware_][blogware] written in [Ruby][] using [Sinatra][] [DSL][]
+that renders files written in [Markdown][].
 
 * Easy to configure.
 * Easy to synchronize.
 
 Fork the project and try.
+
+[postview]: http://github.com/hallison/postview/
+[blogware]: http://en.wikipedia.org/wiki/Blog_engine
+[ruby]:     http://www.ruby-lang.org/
+[sinatra]:  http://www.sinatrarb.com/
+[dsl]:      http://en.wikipedia.org/wiki/Domain-specific_language
+[markdown]: http://daringfireball.net/projects/markdown/
 

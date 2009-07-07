@@ -2,11 +2,10 @@ $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/..")
 require 'test/unit'
 require 'lib/postview'
 
-class TestRouter < Test::Unit::TestCase
+class TestMapping < Test::Unit::TestCase
 
   def setup
-    @settings = Postview::Settings.new("#{Postview::PATH}/test/fixtures/settings.yml")
-    @map      = @settings.build_mapping
+    @map = Postview::Settings.new("#{Postview::PATH}/test/fixtures/settings.yml").build_mapping
   end
 
   def test_should_check_all_attributes
@@ -25,6 +24,7 @@ class TestRouter < Test::Unit::TestCase
     assert_equal "/blog/posts",   @map.path_to(:posts)
     assert_equal "/blog/tags",    @map.path_to(:tags)
     assert_equal "/blog/archive", @map.path_to(:archive)
+    assert_equal "/blog/drafts",  @map.path_to(:drafts)
     assert_equal "/blog/search",  @map.path_to(:search)
     assert_equal "/blog/about",   @map.path_to(:about)
   end
@@ -34,13 +34,14 @@ class TestRouter < Test::Unit::TestCase
   end
 
   def test_should_parse_path_to_title
-    assert_equal "Tags", @map.path_to_title(:tags)
+    assert_equal "Tags",    @map.path_to_title(:tags)
     assert_equal "Archive", @map.path_to_title(:archive)
+    assert_equal "Drafts",  @map.path_to_title(:drafts)
 
     @map.root = "blog"
 
     assert_equal "Search", @map.path_to_title(:search)
-    assert_equal "About", @map.path_to_title(:about)
+    assert_equal "About",  @map.path_to_title(:about)
   end
 
   def test_should_parse_nested_attributes
