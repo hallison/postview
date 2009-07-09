@@ -1,8 +1,0 @@
-.*.sw[p-z]
-.session
-*.tmp
-test.*
-config/settings.yml
-posts
-*.html
-

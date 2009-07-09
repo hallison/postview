@@ -1,5 +1,24 @@
-require 'rake/testtask'
+$LOAD_PATH << File.expand_path(File.dirname(__FILE__))
 
-Rake::TestTask.new
+require 'lib/postview'
 
-task :default => [ :test ]
+def banner(message)
+  printf "\n%s\n", Postview
+  printf "\n%s\n\n", message
+end
+
+def prompt(label, default = nil)
+  while true
+    printf((default ? "%s [%s]: " : "%s: "), "#{label}", "#{default}")
+    value = $stdin.readline.chomp.strip
+    value = default if value.empty?
+    return value unless value.nil? || value.to_s.empty?
+  end
+end
+
+Dir["tasks/*.rake"].each do |task|
+  load task
+end
+
+task :default => :test
+

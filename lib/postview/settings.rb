@@ -38,8 +38,6 @@ class Settings
     new(SETTINGS)
   end
 
-private
-
   def file_names_for(directory, pattern = "**.*")
     Dir[File.join(directory_for(directory), pattern)]
   end

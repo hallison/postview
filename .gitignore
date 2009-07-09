@@ -2,7 +2,6 @@
 .session
 *.tmp
 test.*
-config/settings.yml
 posts
 *.html
-
+pkg
