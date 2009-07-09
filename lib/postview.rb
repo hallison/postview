@@ -21,7 +21,7 @@ module Postview
   class << self
 
     def version
-      [ 0, 3, 1, nil ].compact.join('.')
+      [ 0, 3, 2, nil ].compact.join('.')
     end
 
     def tagged
