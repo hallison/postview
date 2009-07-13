@@ -5,24 +5,27 @@ desc <<-end
 end
 task :post do
   banner "New post. Type all attributes for new post."
-  title        = prompt("Post title")
-  publish_date = prompt("Publish date", Date.today)
-  tags         = prompt("Tags separated by spaces")
+  path = Postview::Settings.load.directory_for(:drafts)
+  post = Postage::Post.new(
+    :title        => prompt("Post title"),
+    :publish_date => prompt("Publish date", Date.today),
+    :tags         => prompt("Tags separated by spaces").split(' '),
+    :filter       => :markdown,
+    :content      => <<-end_content.gsub(/^[ ]{6}/,'')
+      Tanks for use #{Postview}.
+      Input here the content of your post.
+    end_content
+  )
 
-  file_name = "#{publish_date.to_s.gsub(/-/,'')}-#{title.gsub(/\W/,'_').squeeze('_').downcase}.#{tags.gsub(' ','.')}.mkd"
-  file_name = File.join(Postview::Settings.load.directory_for(:drafts), file_name)
+  post.build_file
+  post.create_into(path)
 
-  File.open file_name, "w" do |file|
-    file << "#{title}\n"
-    file << "="*title.size
-  end
-
-  printf "%s\n", "The post '#{title}' was created in '#{file_name}'."
+  printf "%s\n", "The post '#{post.title}' was created in '#{path}/#{post.file}'."
 
   if prompt("Edit post?", "y") =~ /y/i
     editor = ENV['EDITOR'] || ENV['VISUAL']
     if editor
-      sh "#{editor} #{file_name}"
+      sh "#{editor} #{path}/#{post.file}"
     else
       printf "%s", "Editor not specified."
     end

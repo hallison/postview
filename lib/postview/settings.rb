@@ -27,7 +27,7 @@ class Settings
   end
 
   def build_finder_for(directory)
-    Finder.new(file_names_for(directory))
+    Postage::Finder.new(directory_for(directory))
   end
 
   def build_mapping
