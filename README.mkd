@@ -1,17 +1,66 @@
-# Postview - Just write your posts ...
+Postview
+========
 
-[Postview][] is a simple [_blogware_][blogware] written in [Ruby][] using [Sinatra][] [DSL][]
-that renders files written in [Markdown][].
+Just write your posts ... and view ...
+
+[Postview][] is a simple [_blogware_][blogware] written in [Ruby][]
+using [Sinatra][] [DSL][] that renders files written in [Markdown][].
 
 * Easy to configure.
 * Easy to synchronize.
 
 Fork the project and try.
 
-[postview]: http://github.com/hallison/postview/
-[blogware]: http://en.wikipedia.org/wiki/Blog_engine
-[ruby]:     http://www.ruby-lang.org/
-[sinatra]:  http://www.sinatrarb.com/
-[dsl]:      http://en.wikipedia.org/wiki/Domain-specific_language
-[markdown]: http://daringfireball.net/projects/markdown/
+Getting start
+=============
+
+The [Postview][] requires the following gems:
+
+* [Sinatra][]
+* [Sinatra Mapping][]
+* [Rack][]
+* [Rack-Test][]
+* [Postage][]
+
+So, run [Postview][] with command:
+
+    $ rackup config/rackup.ru
+
+In your browser, access `http://localhost:9292/`.
+
+Configure your site
+-------------------
+
+Edit the file `config/settings.yml`. It's essential.
+
+Create new post
+---------------
+
+New post can be created by using the task `post`:
+
+    $ cd path/to/postview
+    $ rake post
+
+Following all instructions. Please, set environment variable `EDITOR`
+or `VISUAL` for editing your posts. Ether else, run:
+
+    $ cd path/to/postview
+    $ EDITOR=<your favorite editor> rake post
+
+Synchronize your posts
+----------------------
+
+Not available, yet. Please, wait for this feature.
+
+[ruby]:              http://www.ruby-lang.org/
+[postview]:          http://github.com/hallison/postview/
+[sinatra]:           http://www.sinatrarb.com/
+[sinatra mapping]:   http://www.sinatrarb.com/
+[rack]:              http://rack.rubyforge.org/
+[rack-test]:         http://github.com/brynary/rack-test
+[postage]:           http://postage.rubyforge.org/
+
+[blogware]:          http://en.wikipedia.org/wiki/Blog_engine
+[dsl]:               http://en.wikipedia.org/wiki/Domain-specific_language
+[markdown]:          http://daringfireball.net/projects/markdown
 

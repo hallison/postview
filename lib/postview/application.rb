@@ -2,172 +2,183 @@ module Postview
 
 class Application < Sinatra::Base
 
+  register Sinatra::Mapping
+
   configure do
     set :app_file, __FILE__
-    set :root,     PATH
+    set :root,     ROOT
     set :static,   true
 
     set :settings, Settings.load
     set :site,     settings.build_site
-    set :map,      settings.build_mapping
     set :page,     OpenStruct.new(:title => site.subtitle, :keywords => [])
+
+    mapping settings.mapping
   end
 
   configure :development do
     site.url = '/'
-    map.root = site.url
+    map :root, site.url
   end
 
   before do
     @settings = options.settings
     @site     = options.site
-    @map      = options.map
     @page     = options.page
     @tags     = @site.find.all_tags.sort
+    @posts    = @site.find.all_posts.reverse
   end
 
   helpers do
     attr_reader :site, :page, :posts, :tags, :archive, :post, :tag, :map
-
-    def path_to(*args)
-      args.compact!
-      query = args.pop if args.last.is_a?(Hash)
-      path  = map.path_to(*args)
-      path << "?" << build_query(query) if query
-      path
-    end
-
-    def title_to(*args)
-      map.path_to_title(*args)
-    end
   end
+
+  helpers Sinatra::MappingHelpers
 
   # Show only the last 5 posts.
-  get map.path_to(:root) do
+  get root_path do
     @posts = @site.find.all_posts.limit(5).reverse
     @page.title, @page.keywords = @site.subtitle, %w(posts)
-    show :posts, :url => :posts
+    show :posts, :posts_path => :posts, :tags_path => :tags
   end
 
-  get map.path_to(:root).gsub(/\/$/,'') do
-	  redirect @map.path_to(:root), 301
+  get root_path.gsub(/\/$/,'') do
+	  redirect path_to(:root), 301
   end
 
   # Show all posts.
-  get map.path_to(:posts) do
-    @posts = @site.find.all_posts.reverse
-    @page.title, @page.keywords = @map.path_to_title(:posts), @tags
-    show :posts, :url => :posts
+  get posts_path do
+    @page.title, @page.keywords = title_path(:posts), @tags
+    show :posts, :posts_path => :posts, :tags_path => :tags
   end
 
-  get map.path_to(:posts, "/") do
-    redirect @map.path_to(:posts), 301
+  get posts_path "/" do
+    redirect path_to(:posts), 301
   end
 
   # Show selected post.
-  get map.path_to(:posts, ":year/:month/:day/:name") do |year, month, day, name|
+  get posts_path "/:year/:month/:day/:name" do |year, month, day, name|
     @post = @site.find.post(year, month, day, name)
     @page.title, @page.keywords = @post.title, @post.tags.join(' ')
-    show :post, :url => :posts
+    show :post, :posts_path => :posts, :tags_path => :tags
   end
 
-  get map.path_to(:posts, ":year/:month/:day/:name/") do |year, month, day, name|
-	  redirect @map.path_to(:posts, year, month, day, name), 301
+  get posts_path "/:year/:month/:day/:name/" do |year, month, day, name|
+	  redirect path_to(:posts, year, month, day, name), 301
   end
 
   # Show all tags.
-  get map.path_to(:tags) do
-    @page.title, @page.keywords = @map.path_to_title(:tags), @tags
-    show :tags
+  get tags_path do
+    @page.title, @page.keywords = title_path(:tags), @tags
+    show :tags, :posts_path => :posts, :tags_path => :tags
   end
 
-  get map.path_to(:tags, "/") do
-	  redirect @map.path_to(:tags), 301
+  get tags_path "/" do
+	  redirect path_to(:tags), 301
   end
 
   # Show all posts by selected tag.
-  get map.path_to(:tags, ":tag") do |tag|
+  get tags_path "/:tag" do |tag|
     @tag   = @site.find.tag(tag)
     @posts = @site.find.all_posts_by_tag(tag)
-    @page.title, @page.keywords = "#{@map.path_to_title(:tags)} - #{@tag.capitalize}", %(posts #{@tag}) unless @posts.empty?
-    show :tag
+    @page.title, @page.keywords = "#{title_path(:tags)} - #{@tag.capitalize}", %(posts #{@tag}) unless @posts.empty?
+    show :tag, :posts_path => :posts, :tags_path => :tags
   end
 
-  get map.path_to(:tags, ":tag/") do |tag|
-    redirect @map.path_to(:tags, tag), 301
+  get tags_path "/:tag/" do |tag|
+    redirect path_to(:tags, tag), 301
   end
 
   # Show archives grouped by year.
-  get map.path_to(:archive) do
-    @posts = @site.find_archived.all_posts.limit(10).reverse
-    @page.title, @page.keywords = @map.path_to_title(:archive), @tags
-    show :archive
+  get archive_path do
+    @posts = @site.find_archived.all_posts.reverse
+    @tags  = @site.find_archived.all_tags
+    @page.title, @page.keywords = title_path(:archive), @tags
+    show :archive, :archive_path => :archive, :tags_path => [:archive,:tags]
   end
 
-  get map.path_to(:archive, "/") do
-	  redirect @map.path_to(:archive), 301
+  get archive_path "/" do
+	  redirect path_to(:archive), 301
   end
 
   # Show selected post in archive.
-  get map.path_to(:archive, ":year/:month/:day/:name") do |year, month, day, name|
-    @post = @site.find_archived.post(year, month, day, name)
+  get archive_path "/:year/:month/:day/:name" do |year, month, day, name|
+    @post  = @site.find_archived.post(year, month, day, name)
+    @posts = @site.find_archived.all_posts.reverse
+    @tags  = @site.find_archived.all_tags
     @page.title, @page.keywords = @post.title, @post.tags.join(' ')
-    show :post, :url => :archive
+    show :post, :posts_path => :archive, :tags_path => [:archive, :tags]
   end
 
-  get map.path_to(:archive, ":year/:month/:day/:name/") do |year, month, day, name|
-	  redirect @map.path_to(:archive, year, month, day, name), 301
+  get archive_path "/:year/:month/:day/:name/" do |year, month, day, name|
+	  redirect path_to(:archive, year, month, day, name), 301
   end
 
   # Show all archived posts by selected tag.
-  get map.path_to(:archive, :tags, ":tag") do |tag|
+  get archive_path :tags, ":tag" do |tag|
     @tag   = @site.find_archived.tag(tag)
-    @posts = @site.find_archived.all_posts_by_tag(tag)
-    @page.title, @page.keywords = "#{@map.path_to_title(:tags)} - #{@tag.capitalize}", %(posts #{@tag}) unless @posts.empty?
-    show :tag, :url => :archive
+    @posts = @site.find_archived.all_posts_by_tag(tag).reverse
+    @page.title, @page.keywords = "#{title_path(:tags)} - #{@tag.capitalize}", %(posts #{@tag}) unless @posts.empty?
+    show :tag, :posts_path => :posts, :tags_path => [:archive, :tags]
   end
 
-  get map.path_to(:archive, :tags,":tag", "/") do |tag|
-    redirect map.path_to(:archive, :tags, tag), 301
+  get archive_path :tags, ":tag/" do |tag|
+    redirect path_to(:archive, :tags, tag), 301
   end
 
   # Show all drafts.
-  get map.path_to(:drafts) do
+  get drafts_path do
     @posts = @site.find_drafted.all_posts
-    @page.title, @page.keywords = @map.path_to_title(:drafts), ["drafts"] + @tags
-    show :posts, :url => :drafts
+    @tags  = @site.find_drafted.all_tags
+    @page.title, @page.keywords = title_path(:drafts), ["drafts"] + @tags
+    show :posts, :posts_path => :drafts, :tags_path => [:drafts, :tags]
   end
 
-  get map.path_to(:drafts, "/") do
-    redirect @map.path_to(:drafts), 301
+  get drafts_path "/" do
+    redirect path_to(:drafts), 301
   end
 
   # Show selected drafted post.
-  get map.path_to(:drafts, ":year/:month/:day/:name") do |year, month, day, name|
-    @post = @site.find_drafted.post(year, month, day, name)
+  get drafts_path "/:year/:month/:day/:name" do |year, month, day, name|
+    @post  = @site.find_drafted.post(year, month, day, name)
+    @posts = @site.find_drafted.all_posts
+    @tags  = @site.find_drafted.all_tags
     @page.title, @page.keywords = @post.title, @post.tags.join(' ')
-    show :post, :url => :drafts
+    show :posts, :posts_path => :drafts, :tags_path => [:drafts, :tags]
   end
 
-  get map.path_to(:drafts, ":year/:month/:day/:name/") do |year, month, day, name|
-	  redirect @map.path_to(:drafts, year, month, day, name), 301
+  get drafts_path "/:year/:month/:day/:name/" do |year, month, day, name|
+	  redirect path_to(:drafts, year, month, day, name), 301
+  end
+
+  # Show all drafted posts by selected tag.
+  get drafts_path :tags, ":tag" do |tag|
+    @tag   = @site.find_drafted.tag(tag)
+    @posts = @site.find_drafted.all_posts_by_tag(tag).reverse
+    @tags  = @site.find_drafted.all_tags
+    @page.title, @page.keywords = "#{title_path(:tags)} - #{@tag.capitalize}", %(posts #{@tag}) unless @posts.empty?
+    show :posts, :posts_path => :drafts, :tags_path => [:drafts, :tags]
+  end
+
+  get drafts_path :tags, ":tag/" do |tag|
+    redirect path_to(:archive, :tags, tag), 301
   end
 
   # Show information site.
-  get map.path_to(:about) do
-    show :about
+  get about_path do
+    show :about, :about_path => :about
   end
 
-  get map.path_to(:about, "/") do
-	  redirect @map.path_to(:about), 301
+  get about_path "/" do
+	  redirect path_to(:about), 301
   end
 
   # Search posts by title or match file name.
-  get map.path_to(:search) do
+  get search_path do
     @posts   = @site.find.posts(*params.values)
     @archive = @site.find_archived.posts(*params.values)
-    @page.title, @page.keywords = @map.path_to_title(:search), @tags
-    show :search
+    @page.title, @page.keywords = title_path(:search), @tags
+    show :search, :posts_path => :posts, :tags_path => :tags, :archive_path => :archive, :search_path => :search
   end
 
   def show(template, locals = {}, options = {})

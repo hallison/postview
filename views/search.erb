@@ -1,6 +1,8 @@
+<div id="content">
+
 <div class="entry">
 
-<h1><%= title_to :search %> - Results for <%= params.values.to_s.split.join(', ') %></h1>
+<h1><%= title_path :search %> - Results for <%= params.values.to_s.split.join(', ') %></h1>
 
 <div class="text">
 
@@ -9,26 +11,26 @@
 </p>
 
 <% unless posts.empty? %>
-<h2><%= title_to :posts %></h2>
+<h2><%= title_path :posts %></h2>
 
 <ul>
 <% for post in posts %>
 <li>
-  <%= post.publish_date.strftime('%Y-%m-%d') %> - <strong><a href="<%= path_to :posts, post %>"><%= post.title %></a></strong>
-  <span>(<%= post.tags.collect{|tag| "<a href='#{path_to :tags, tag}'>#{tag}</a>"}.join(', ') %>)</span>
+  <%= post.publish_date.strftime('%Y-%m-%d') %> - <strong><%= link_to post.title, posts_path, post, :title => post.title %></strong>
+  <span>(<%= post.tags.map{ |tag| link_to tag.capitalize, tags_path, tag, :title => tag.capitalize }.join(', ') %>)</span>
 </li>
 <% end %>
 </ul>
 <% end %>
 
 <% unless archive.empty? %>
-<h2><%= title_to :archive %></h2>
+<h2><%= title_path :archive %></h2>
 
 <ul>
 <% for post in archive %>
 <li>
-  <%= post.publish_date.strftime('%Y-%m-%d') %> - <strong><a href="<%= path_to :archive, post %>"><%= post.title %></a></strong>
-  <span>(<%= post.tags.collect{|tag| "<a href='#{path_to :archive, :tags, tag}'>#{tag}</a>"}.join(', ') %>)</span>
+  <%= post.publish_date.strftime('%Y-%m-%d') %> - <strong><%= link_to post.title, archive_path, post, :title => post.title %></strong>
+  <span>(<%= post.tags.map{ |tag| link_to tag.capitalize, :archive, :tags, tag, :title => tag.capitalize }.join(', ') %>)</span>
 </li>
 <% end %>
 </ul>
@@ -37,4 +39,6 @@
 </div>
 
 </div>
+
+</div><!-- content -->
 

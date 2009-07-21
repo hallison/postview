@@ -1,10 +1,10 @@
 <div class="entry">
 
-<h1><%= title_to :tags %></h1>
+<h1><%= title_path :tags %></h1>
 
 <ul>
 <% for tag in tags %>
-  <li><a href="<%= path_to :tags, tag %>"><%= tag %></a></li>
+  <li><%= link_to tag.capitalize, tags_path, tag, :title => tag.capitalize %></li>
 <% end %>
 </ul>
 

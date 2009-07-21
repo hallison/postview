@@ -8,11 +8,35 @@ class Settings
      end
   end
 
+  DEFAULTS = {
+    :site => {
+      :title    => "Postview",
+      :subtitle => "Post your articles",
+      :author   => "Hallison Batista",
+      :email    => "email@example.com",
+      :url      => "http://example.com/"
+    },
+    :directories => {
+      :posts   => "#{ROOT}/posts",
+      :archive => "#{ROOT}/posts/archive",
+      :drafts  => "#{ROOT}/posts/drafts"
+    },
+    :mapping => {
+      :posts   => "posts",
+      :tags    => "tags",
+      :archive => "archive",
+      :drafts  => "drafts",
+      :search  => "search",
+      :about   => "about"
+    }
+  }
+
   attr_reader :site, :directories, :mapping
 
-  def initialize(file_name)
-    raise FileError unless File.exist? file_name
-    YAML.load_file(file_name).symbolize_keys.instance_variables_set_to(self)
+  def initialize(attributes = {})
+    attributes.symbolize_keys.merge(DEFAULTS) do |key, value, default|
+      value || default
+    end.instance_variables_set_to(self)
   end
 
   def build_site
@@ -30,12 +54,21 @@ class Settings
     Postage::Finder.new(directory_for(directory))
   end
 
-  def build_mapping
-    Mapping.new(mapping)
+  def self.load
+    begin
+      load_file(SETTINGS)
+    rescue FileError => error
+      $stdout.puts <<-end_error.gsub(/[ ]{8}/,'')
+        >> #{error}
+        >> Please, create file #{ROOT}/config/settings.yml.
+      end_error
+      new(DEFAULTS)
+    end
   end
 
-  def self.load
-    new(SETTINGS)
+  def self.load_file(file_name)
+    raise FileError unless File.exist? file_name
+    new(YAML.load_file(file_name))
   end
 
   def file_names_for(directory, pattern = "**.*")
@@ -44,7 +77,7 @@ class Settings
 
   def directory_for(name)
     return directories[name] if directories[name].match(%r{^/.*})
-    File.join(PATH, directories[name])
+    File.join(ROOT, directories[name])
   end
 
 end # class Settings

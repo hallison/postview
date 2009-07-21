@@ -1,8 +1,14 @@
 require 'readline'
 
-desc <<-end
+desc <<-end_desc.gsub(/^[ ]{2}/,'')
   Create new post in #{Postview::Settings.load.directory_for(:posts)}.
-end
+  For edit posts, set environment variable EDITOR or VISUAL. Otherwise,
+  pass editor="<your favorite editor command and arguments>".
+
+  Example:
+
+  $ rake post editor="gvim -f"
+end_desc
 task :post do
   banner "New post. Type all attributes for new post."
   path = Postview::Settings.load.directory_for(:drafts)
@@ -22,8 +28,8 @@ task :post do
 
   printf "%s\n", "The post '#{post.title}' was created in '#{path}/#{post.file}'."
 
-  if prompt("Edit post?", "y") =~ /y/i
-    editor = ENV['EDITOR'] || ENV['VISUAL']
+  editor = ENV['editor'] || ENV['EDITOR'] || ENV['VISUAL'] || 'none'
+  if prompt("Edit post using '#{editor}'?", "y") =~ /y/i
     if editor
       sh "#{editor} #{path}/#{post.file}"
     else

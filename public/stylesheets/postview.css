@@ -161,11 +161,11 @@ div#navigation-bar form input[type="text"]:hover {
 }
 
 div#content {
-  width:80%;
+  width:60%;
 }
 
 div#options {
-  width:20%;
+  width:40%;
 }
 
 .entry {
@@ -185,7 +185,7 @@ div#options .entry {
 }
 
 .entry h1 {
-  padding: 2px 8px 2px 8px;
+  padding: 2px 12px 2px 12px;
   border-bottom: 1px solid #5C6E9A;
 }
 
@@ -199,7 +199,7 @@ div#options .entry {
 
 .entry-meta,
 .text {
-  padding: 2px 8px 2px 8px;
+  padding: 2px 12px 2px 12px;
 }
 
 .entry-meta,
@@ -208,13 +208,17 @@ div#options .entry {
 }
 
 .entry ul {
-  padding: 4px;
+  padding: 2px 12px 2px 12px;
   padding-left: 32px;
 }
 
 .text {
   margin: 8px auto 8px auto;
   text-align: justify;
+}
+
+.text h2 {
+  border-bottom: 1px dotted #5C6E9A;
 }
 
 .text p {

@@ -23,11 +23,12 @@ class TestSettings < Test::Unit::TestCase
         :posts   => "posts",
         :tags    => "tags",
         :archive => "archive",
+        :drafts  => "drafts",
         :search  => "search",
         :about   => "about"
       }
     }
-    @settings = Postview::Settings.new("#{Postview::PATH}/test/fixtures/settings.yml")
+    @settings = Postview::Settings.load_file("#{Postview::ROOT}/test/fixtures/settings.yml")
   end
 
   def test_should_check_settings
@@ -40,12 +41,27 @@ class TestSettings < Test::Unit::TestCase
 
   def test_should_build_site
     assert_not_nil @settings.build_site
+    assert_not_nil @settings.build_site.find
+    assert_not_nil @settings.build_site.find_archived
+    assert_not_nil @settings.build_site.find_drafted
   end
 
-  def test_should_rescue_exception_for_file_not_found
+  def test_should_rescue_exception_for_file_not_found_and_load_defaults
     assert_raise Postview::Settings::FileError do
-      Postview::Settings.new("file/not/found.yml")
+      @settings = Postview::Settings.load_file("file/not/found.yml")
     end
   end
+
+  def test_should_rescue_exception_and_load_defaults
+    assert_raise Postview::Settings::FileError do
+      settings = Postview::Settings.load_file("file/not/found.yml")
+      Postview::Settings::DEFAULTS.each do |method, values|
+        values.collect do |key, value|
+          assert_equal value, @settings.send(method)[key]
+        end
+      end
+    end
+  end
+
 end
 

@@ -5,17 +5,19 @@ site:
   email: you@example.com
   url: http://you.example.com/
 directories:
-  posts: posts
-  archive: posts/archive
-  drafts: posts/drafts
+  #posts: posts
+  #archive: posts/archive
+  #drafts: posts/drafts
+
 # Set routes for your site
 # The root route most be empty if point to "/". If your site is a sub-domain, e.g. blog/, then
 # set root value root to /blog.
 mapping:
-#  root:
-  posts: posts
-  tags: tags
-  archive: archive
-  search: search
-  about: about
+  #root:
+  #posts: posts
+  #tags: tags
+  #archive: archive
+  #search: search
+  #about: about
+  #drafts: drafts
 

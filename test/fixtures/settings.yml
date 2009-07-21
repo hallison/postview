@@ -9,7 +9,7 @@ directories:
   archive: test/fixtures/posts/archive
   drafts: test/fixtures/posts/drafts
 mapping:
-#  root: test
+  #root: test
   posts: posts
   tags: tags
   archive: archive

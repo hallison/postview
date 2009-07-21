@@ -5,7 +5,7 @@ require 'lib/postview'
 class TestSite < Test::Unit::TestCase
 
   def setup
-    @site = Postview::Settings.new("#{Postview::PATH}/test/fixtures/settings.yml").build_site
+    @site = Postview::Settings.load_file("#{Postview::ROOT}/test/fixtures/settings.yml").build_site
   end
 
   def test_check_attributes

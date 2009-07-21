@@ -28,49 +28,29 @@
 
 <address>
 
-  <a href="<%= path_to :root %>" title="<%= site.title %>">Home</a>
-  <a href="<%= path_to :tags %>" title="All tags"><%= title_to :tags %></a>
-  <a href="<%= path_to :archive %>" title="Archive"><%= title_to :archive %></a>
-  <a href="<%= path_to :about %>" title="About"><%= title_to :about %></a>
+  <%= link_to "Home",               :root,    :title => site.title %>
+  <%= link_to title_path(:posts),   :posts,   :title => title_path(:posts) %>
+  <%= link_to title_path(:archive), :archive, :title => title_path(:archive) %>
+  <%= link_to title_path(:about),   :about,   :title => title_path(:about) %>
 
 </address>
 
 <form action="<%= path_to :search %>" method="get">
-  <input type="text" name="keyword" value="<%= title_to :search %>" onfocus="this.value=''" onblur="this.value='<%= title_to :search %>'"/>
+  <input type="text" name="keyword" value="<%= title_path :search %>" onfocus="this.value=''" onblur="this.value='<%= title_path :search %>'" title="<%= title_path :search %>"/>
 </form>
 
 </div><!-- navigation-bar -->
 
 <br/>
 
-<div id="content">
-
 <%= yield %>
-
-</div><!-- content -->
-
-<div id="options">
-
-  <div class="entry">
-
-    <h1><%= title_to :tags %></h1>
-
-    <ul>
-    <% for tag in tags %>
-      <li><a href="<%= path_to :tags, tag %>" title="<%= title_to tag %>"><%= title_to tag %></a></li>
-    <% end %>
-    </ul>
-
-  </div>
-
-</div><!-- options -->
 
 <br/>
 
 <div id="footer">
 
 <p>
-  <small><%= site.title %> powered by <a href="http://hallison.github.com/postview">Postview</a></small>
+<small><%= site.title %> &copy; 2009 <%= site.author %>. Powered by <a href="http://github.com/hallison/postview">Postview</a></small>.
 </p>
 
 </div><!-- footer -->

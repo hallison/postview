@@ -1,7 +1,8 @@
 .*.sw[p-z]
-.session
 *.tmp
-test.*
-posts
 *.html
-pkg
+test.*
+doc/*
+pkg/*
+posts
+
