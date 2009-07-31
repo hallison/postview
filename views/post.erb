@@ -27,7 +27,7 @@
 
     <ul>
     <% for post in posts %>
-      <li><%= post.publish_date %> - <%= link_to post.title, posts_path, post, :title => post.title %></li>
+      <li><%= link_to "#{post.publish_date} - #{post.title}", posts_path, post, :title => post.title %></li>
     <% end %>
     </ul>
 

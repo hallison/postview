@@ -5,10 +5,10 @@
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title><%= site.title %> :: <%= page.title %></title>
-  <meta name="generator"   content="Postview" />
-  <meta name="description" content="<%= site.subtitle %>" />
-  <meta name="keywords"    content="<%= page.keywords %>" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/postview.css" />
+  <meta name="generator"   content="<%=Postview%>" />
+  <meta name="description" content="<%=site.subtitle%>" />
+  <meta name="keywords"    content="<%=page.keywords%>" />
+  <link rel="stylesheet" type="text/css" href="<%=path_to "/stylesheets/postview.css"%>" />
 
 </head>
 
@@ -16,9 +16,9 @@
 
 <div id="header">
 
-  <h1><a href="<%= site.url %>"><%= site.title %></a></h1>
-  <h2><%= page.title || site.subtitle %></h2>
-  <p>By <a href="mailto:<%= site.email %>"><%= site.author %></a></p>
+  <h1><%=link_to site.title, :root, :title => "#{site.title}"%></h1>
+  <h2><%=page.title || site.subtitle%></h2>
+  <p>By <%=link_to site.author, "mailto:#{site.email}", :title => "Send mail to #{site.author}"%></p>
 
 </div><!-- header -->
 
@@ -28,29 +28,29 @@
 
 <address>
 
-  <%= link_to "Home",               :root,    :title => site.title %>
-  <%= link_to title_path(:posts),   :posts,   :title => title_path(:posts) %>
-  <%= link_to title_path(:archive), :archive, :title => title_path(:archive) %>
-  <%= link_to title_path(:about),   :about,   :title => title_path(:about) %>
+  <%=link_to "Home", :root, :title => site.title%>
+  <%=link_to title_path(:posts), :posts, :title => title_path(:posts)%>
+  <%=link_to title_path(:archive), :archive, :title => title_path(:archive)%>
+  <%=link_to title_path(:about), :about, :title => title_path(:about)%>
 
 </address>
 
-<form action="<%= path_to :search %>" method="get">
-  <input type="text" name="keyword" value="<%= title_path :search %>" onfocus="this.value=''" onblur="this.value='<%= title_path :search %>'" title="<%= title_path :search %>"/>
+<form action="<%=path_to :search%>" method="get">
+  <input type="text" name="keyword" value="<%=title_path :search%>" onfocus="this.value=''" onblur="this.value='<%=title_path :search%>'" title="<%=title_path :search%>"/>
 </form>
 
 </div><!-- navigation-bar -->
 
 <br/>
 
-<%= yield %>
+<%=yield%>
 
 <br/>
 
 <div id="footer">
 
 <p>
-<small><%= site.title %> &copy; 2009 <%= site.author %>. Powered by <a href="http://github.com/hallison/postview">Postview</a></small>.
+<small><%=site.title%> &copy; 2009 <%=site.author%>. Powered by <%=link_to Postview, "http://github.com/hallison/postview"%>.</small>
 </p>
 
 </div><!-- footer -->

@@ -13,7 +13,8 @@ class TestSite < Test::Unit::TestCase
     assert_equal 'Post your articles', @site.subtitle
     assert_equal 'Jack Ducklet', @site.author
     assert_equal 'jack.ducklet@example.com', @site.email
-    assert_equal 'http://jackd.example.com/', @site.url
+    assert_equal 'jackd.example.com', @site.host
+    assert_equal 'path/to/site', @site.directory
   end
 
   def test_should_find_all_posts

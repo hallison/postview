@@ -1,8 +1,11 @@
 .*.sw[p-z]
 *.tmp
 *.html
+*.ru
+*.yml
 test.*
 doc/*
 pkg/*
+tmp/*
 posts
 

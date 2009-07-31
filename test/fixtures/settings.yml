@@ -3,13 +3,16 @@ site:
   subtitle: Post your articles
   author: Jack Ducklet
   email: jack.ducklet@example.com
-  url: http://jackd.example.com/
+  host: jackd.example.com
+  directory: path/to/site
+
 directories:
   posts: test/fixtures/posts
   archive: test/fixtures/posts/archive
   drafts: test/fixtures/posts/drafts
+
 mapping:
-  #root: test
+  root: 
   posts: posts
   tags: tags
   archive: archive

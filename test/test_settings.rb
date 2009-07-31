@@ -8,11 +8,12 @@ class TestSettings < Test::Unit::TestCase
   def setup
     @attributes = {
       :site => {
-        :title    => "Postview",
-        :subtitle => "Post your articles",
-        :author   => "Jack Ducklet",
-        :email    => "jack.ducklet@example.com",
-        :url      => "http://jackd.example.com/"
+        :title     => "Postview",
+        :subtitle  => "Post your articles",
+        :author    => "Jack Ducklet",
+        :email     => "jack.ducklet@example.com",
+        :host      => "jackd.example.com",
+        :directory => "path/to/site"
       },
       :directories => {
         :posts   => "test/fixtures/posts",
@@ -20,6 +21,7 @@ class TestSettings < Test::Unit::TestCase
         :drafts  => "test/fixtures/posts/drafts"
       },
       :mapping => {
+        :root    => nil,
         :posts   => "posts",
         :tags    => "tags",
         :archive => "archive",
@@ -46,19 +48,20 @@ class TestSettings < Test::Unit::TestCase
     assert_not_nil @settings.build_site.find_drafted
   end
 
-  def test_should_rescue_exception_for_file_not_found_and_load_defaults
-    assert_raise Postview::Settings::FileError do
-      @settings = Postview::Settings.load_file("file/not/found.yml")
+  def test_should_rescue_exception_and_load_defaults
+    settings = Postview::Settings.load_file("file/not/found.yml")
+    @attributes.each do |method, values|
+      values.collect do |key, value|
+        assert_equal value, @settings.send(method)[key]
+      end
     end
   end
 
-  def test_should_rescue_exception_and_load_defaults
-    assert_raise Postview::Settings::FileError do
-      settings = Postview::Settings.load_file("file/not/found.yml")
-      Postview::Settings::DEFAULTS.each do |method, values|
-        values.collect do |key, value|
-          assert_equal value, @settings.send(method)[key]
-        end
+  def test_should_rescue_exception_for_empty_file_and_load_defaults
+    settings = Postview::Settings.load_file("#{Postview::ROOT}/test/fixtures/empty.yml")
+    @attributes.each do |method, values|
+      values.collect do |key, value|
+        assert_not_nil settings.send(method)[key]
       end
     end
   end

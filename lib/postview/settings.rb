@@ -2,26 +2,22 @@ module Postview
 
 class Settings
 
-  class FileError < Errno::ENOENT
-     def self.message
-       "#{Postview}: #{$!}"
-     end
-  end
-
   DEFAULTS = {
     :site => {
-      :title    => "Postview",
-      :subtitle => "Post your articles",
-      :author   => "Hallison Batista",
-      :email    => "email@example.com",
-      :url      => "http://example.com/"
+      :title     => "Postview",
+      :subtitle  => "Post your articles",
+      :author    => "Hallison Batista",
+      :email     => "email@example.com",
+      :host      => "example.com",
+      :directory => "/var/www/example"
     },
     :directories => {
-      :posts   => "#{ROOT}/posts",
-      :archive => "#{ROOT}/posts/archive",
-      :drafts  => "#{ROOT}/posts/drafts"
+      :posts   => "posts",
+      :archive => "posts/archive",
+      :drafts  => "posts/drafts"
     },
     :mapping => {
+      :root    => "",
       :posts   => "posts",
       :tags    => "tags",
       :archive => "archive",
@@ -55,20 +51,21 @@ class Settings
   end
 
   def self.load
+    load_file(SETTINGS)
+  end
+
+  def self.load_file(file_name)
     begin
-      load_file(SETTINGS)
-    rescue FileError => error
-      $stdout.puts <<-end_error.gsub(/[ ]{8}/,'')
-        >> #{error}
-        >> Please, create file #{ROOT}/config/settings.yml.
-      end_error
+      new(YAML.load_file(file_name) || DEFAULTS)
+    rescue Errno::ENOENT
       new(DEFAULTS)
     end
   end
 
-  def self.load_file(file_name)
-    raise FileError unless File.exist? file_name
-    new(YAML.load_file(file_name))
+  def self.build_default_file
+    File.open(Postview::SETTINGS, "w+") do |file|
+      file << Postview::Settings::DEFAULTS.to_yaml
+    end unless File.exist? Postview::SETTINGS
   end
 
   def file_names_for(directory, pattern = "**.*")
