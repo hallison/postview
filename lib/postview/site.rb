@@ -1,17 +1,51 @@
 module Postview
 
-  class Site
+# Copyright (c) 2009 Hallison Batista
+class Site
 
-    # Attributes to application.
-    attr_reader   :title, :subtitle, :author, :email
-    attr_accessor :host, :directory
-    attr_accessor :find, :find_archived, :find_drafted
+  # Site title.
+  attr_accessor :title
 
-    def initialize(attributes = {})
-      attributes.instance_variables_set_to(self)
-    end
+  # Subtitle
+  attr_accessor :subtitle
 
-  end # class Site
+  # Author site
+  attr_accessor :author
+
+  # Email to contact author
+  attr_accessor :email
+
+  # Domain for host site
+  attr_accessor :domain
+
+  # Remote directory for site
+  attr_accessor :directory
+
+  # Theme directory name.
+  attr_accessor :theme
+
+  # Finder for posts
+  attr_accessor :find
+
+  # Finder for archived posts
+  attr_accessor :find_archived
+
+  # Finder for drafted posts
+  attr_accessor :find_drafted
+
+  def initialize(attributes = {})
+    attributes.instance_variables_set_to(self)
+  end
+
+  def find_all_tags
+    (find.all_tags + find_archived.all_tags).uniq.sort
+  end
+
+  def find_tag(tag)
+    find.tag(tag) || find_archived.tag(tag)
+  end
+
+end # class Site
 
 end #module Postview
 

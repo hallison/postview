@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+# Copyright (C) 2009 Hallison Batista
+
+require File.expand_path(File.join(__FILE__, "..", "..", "lib", "postview"))
+
+command = ARGV.shift if Postview::CLI.commands.include? ARGV.first
+program = File.basename(__FILE__)
+ENV['RACK_ENV'] = 'production'
+
+ARGV.options do |arguments|
+
+  arguments.summary_indent = "  "
+  arguments.summary_width  = 24
+  arguments.banner = <<-end_banner.gsub /^[ ]{4}/, ''
+    #{Postview::Version}
+
+    Usage:
+      #{program} <command> [options]
+      #{program} [options]
+
+    Commands:
+      #{Postview::CLI.commands.join("\n#{arguments.summary_indent}")}
+
+      Run command with option "-h" or "--help" for more information.
+
+  end_banner
+
+  arguments.separator "Global options:"
+
+  arguments.on("-h", "--help",    nil, "Show this message.")        { puts arguments }
+  arguments.on(nil,  "--version", nil, "Show version information.") { puts Postview::About }
+
+  arguments.separator ""
+
+  begin
+    if command
+      Postview::CLI.run(command, ARGV)
+    elsif ARGV.empty?
+      puts arguments
+      exit 0
+    else
+      arguments.parse!
+    end
+  rescue => error
+    puts arguments
+    puts error
+    exit 1
+  end
+
+end
+

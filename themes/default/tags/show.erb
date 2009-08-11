@@ -1,0 +1,40 @@
+<div class="entry">
+
+  <h1>Posts tagged with <%= tag.capitalize %></h1>
+
+  <div class="text">
+
+    <p>
+    <%= posts.size %> found in posts and <%= archive.size %> found in archive.
+    </p>
+
+    <% unless posts.empty? %>
+    <h2><%= title_path :posts %></h2>
+
+    <ul>
+    <% for post in posts %>
+    <li>
+      <b><%= link_to "#{post.publish_date} - #{post.title}", posts_path, post, :title => post.title %></b>
+      <span>(<%= post.tags.map{ |tag| link_to tag.capitalize, tags_path, tag, :title => tag.capitalize }.join(', ') %>)</span>
+    </li>
+    <% end %>
+    </ul>
+    <% end %>
+
+    <% unless archive.empty? %>
+    <h2><%= title_path :archive %></h2>
+
+    <ul>
+    <% for post in archive %>
+    <li>
+      <b><%= link_to "#{post.publish_date} - #{post.title}", archive_path, post, :title => post.title %></b>
+      <span>(<%= post.tags.map{ |tag| link_to tag.capitalize, tags_path, tag, :title => tag.capitalize }.join(', ') %>)</span>
+    </li>
+    <% end %>
+    </ul>
+    <% end %>
+
+  </div><!--text-->
+
+</div><!--entry-->
+

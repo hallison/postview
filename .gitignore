@@ -8,4 +8,5 @@ doc/*
 pkg/*
 tmp/*
 posts
-
+config/*.yml
+config/*.rb

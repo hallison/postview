@@ -1,103 +1,83 @@
 module Postview
 
-class Application < Sinatra::Base
+# Copyright (c) 2009 Hallison Batista
+class Application < Sinatra::Base #:nodoc: all
 
   register Sinatra::Mapping
 
   configure do
-    set :app_file, __FILE__
-    set :root,     ROOT
-    set :static,   true
-
-    set :settings, Settings.load
+    set :settings, Postview::Settings.load
     set :site,     settings.build_site
-    set :page,     OpenStruct.new(:title => site.subtitle, :keywords => [])
+    set :page,     settings.build_page
 
-    mapping settings.mapping
-  end
+    set :static, true
 
-  configure :development do
-    map :root, "/"
+    set :root,   Postview::PATH
+    set :public, Postview::PATH.join("public")
+    set :views,  Postview::PATH.join("themes", site.theme)
+
+    map :theme, "/"
+
+    mapping settings.sections
   end
 
   before do
     @settings = options.settings
     @site     = options.site
     @page     = options.page
-    @tags     = @site.find.all_tags.sort
+    @tags     = @site.find_all_tags
     @posts    = @site.find.all_posts.reverse
+    @archive  = @site.find_archived.all_posts.reverse
   end
 
-  helpers do
-    attr_reader :site, :page, :posts, :tags, :archive, :post, :tag, :map
-  end
+  helpers Postview::Helpers
 
-  helpers Sinatra::MappingHelpers
+  # Get theme resources
+  # TOFIX: Check security and other problems
+  get theme_path "/:resource/*.*" do |resource, file, ext|
+    send_file options.views.join(resource, "#{file}.#{ext}")
+  end
 
   # Show only the last 5 posts.
   get root_path do
     @posts = @site.find.all_posts.limit(5).reverse
     @page.title, @page.keywords = @site.subtitle, "posts"
-    show :posts, :posts_path => :posts, :tags_path => :tags
-  end
-
-  get root_path.gsub(/\/$/,'') do
-	  redirect path_to(:root), 301
+    show :index, :posts_path => :posts, :tags_path => :tags
   end
 
   # Show all posts.
   get posts_path do
     @page.title, @page.keywords = title_path(:posts), @tags.join(' ')
-    show :posts, :posts_path => :posts, :tags_path => :tags
-  end
-
-  get posts_path "/" do
-    redirect path_to(:posts), 301
+    show :"posts/index", :posts_path => :posts, :tags_path => :tags
   end
 
   # Show selected post.
   get posts_path "/:year/:month/:day/:name" do |year, month, day, name|
     @post = @site.find.post(year, month, day, name)
     @page.title, @page.keywords = @post.title, @post.tags.join(' ')
-    show :post, :posts_path => :posts, :tags_path => :tags
-  end
-
-  get posts_path "/:year/:month/:day/:name/" do |year, month, day, name|
-	  redirect path_to(:posts, year, month, day, name), 301
+    show :"posts/show", :posts_path => :posts, :tags_path => :tags
   end
 
   # Show all tags.
   get tags_path do
     @page.title, @page.keywords = title_path(:tags), @tags.join(' ')
-    show :tags, :posts_path => :posts, :tags_path => :tags
-  end
-
-  get tags_path "/" do
-	  redirect path_to(:tags), 301
+    show :"tags/index", :posts_path => :posts, :tags_path => :tags
   end
 
   # Show all posts by selected tag.
   get tags_path "/:tag" do |tag|
-    @tag   = @site.find.tag(tag)
-    @posts = @site.find.all_posts_by_tag(tag)
+    @tag     = @site.find_tag(tag)
+    @posts   = @site.find.all_posts_by_tag(tag)
+    @archive = @site.find_archived.all_posts_by_tag(tag)
     @page.title, @page.keywords = "#{title_path(:tags)} - #{@tag.capitalize}", "posts #{@tag}" unless @posts.empty?
-    show :tag, :posts_path => :posts, :tags_path => :tags
-  end
-
-  get tags_path "/:tag/" do |tag|
-    redirect path_to(:tags, tag), 301
+    show :"tags/show", :posts_path => :posts, :archive_path => :archive, :tags_path => :tags
   end
 
   # Show archives grouped by year.
   get archive_path do
     @posts = @site.find_archived.all_posts.reverse
-    @tags  = @site.find_archived.all_tags
     @page.title, @page.keywords = title_path(:archive), @tags.join(' ')
-    show :archive, :archive_path => :archive, :tags_path => [:archive,:tags]
-  end
-
-  get archive_path "/" do
-	  redirect path_to(:archive), 301
+    show :"archive/index", :archive_path => :archive, :posts_path => :archive, :tags_path => :tags
   end
 
   # Show selected post in archive.
@@ -106,70 +86,29 @@ class Application < Sinatra::Base
     @posts = @site.find_archived.all_posts.reverse
     @tags  = @site.find_archived.all_tags
     @page.title, @page.keywords = @post.title, @post.tags.join(' ')
-    show :post, :posts_path => :archive, :tags_path => [:archive, :tags]
-  end
-
-  get archive_path "/:year/:month/:day/:name/" do |year, month, day, name|
-	  redirect path_to(:archive, year, month, day, name), 301
-  end
-
-  # Show all archived posts by selected tag.
-  get archive_path :tags, "/:tag" do |tag|
-    @tag   = @site.find_archived.tag(tag)
-    @posts = @site.find_archived.all_posts_by_tag(tag).reverse
-    @page.title, @page.keywords = "#{title_path(:tags)} - #{@tag.capitalize}", "posts #{@tag}" unless @posts.empty?
-    show :tag, :posts_path => :posts, :tags_path => [:archive, :tags]
-  end
-
-  get archive_path :tags, "/:tag/" do |tag|
-    redirect path_to(:archive, :tags, tag), 301
+    show :"archive/show", :posts_path => :archive, :tags_path => :tags
   end
 
   # Show all drafts.
   get drafts_path do
-    @posts = @site.find_drafted.all_posts
-    @tags  = @site.find_drafted.all_tags
+    @posts = @site.find_drafted.all_posts.reverse
+    @tags  = @site.find_drafted.all_tags.sort
     @page.title, @page.keywords = title_path(:drafts), "drafts #{@tags.join(' ')}"
-    show :posts, :posts_path => :drafts, :tags_path => [:drafts, :tags]
-  end
-
-  get drafts_path "/" do
-    redirect path_to(:drafts), 301
+    show :"posts/index", :posts_path => :drafts, :tags_path => [:drafts, :tags]
   end
 
   # Show selected drafted post.
   get drafts_path "/:year/:month/:day/:name" do |year, month, day, name|
     @post  = @site.find_drafted.post(year, month, day, name)
-    @posts = @site.find_drafted.all_posts
-    @tags  = @site.find_drafted.all_tags
+    @posts = @site.find_drafted.all_posts.reverse
+    @tags  = @site.find_drafted.all_tags.sort
     @page.title, @page.keywords = @post.title, @post.tags.join(' ')
-    show :post, :posts_path => :drafts, :tags_path => [:drafts, :tags]
-  end
-
-  get drafts_path "/:year/:month/:day/:name/" do |year, month, day, name|
-	  redirect path_to(:drafts, year, month, day, name), 301
-  end
-
-  # Show all drafted posts by selected tag.
-  get drafts_path :tags, "/:tag" do |tag|
-    @tag   = @site.find_drafted.tag(tag)
-    @posts = @site.find_drafted.all_posts_by_tag(tag).reverse
-    @tags  = @site.find_drafted.all_tags
-    @page.title, @page.keywords = "#{title_path(:tags)} - #{@tag.capitalize}", "posts #{@tag}" unless @posts.empty?
-    show :posts, :posts_path => :drafts, :tags_path => [:drafts, :tags]
-  end
-
-  get drafts_path :tags, "/:tag/" do |tag|
-    redirect path_to(:archive, :tags, tag), 301
+    show :"posts/show", :posts_path => :drafts, :tags_path => [:drafts, :tags]
   end
 
   # Show information site.
   get about_path do
-    show :about, :about_path => :about
-  end
-
-  get about_path "/" do
-	  redirect path_to(:about), 301
+    show :about, :about_path => :about, :posts_path => :posts, :tags_path => :tags
   end
 
   # Search posts by title or match file name.
@@ -181,7 +120,7 @@ class Application < Sinatra::Base
   end
 
   def show(template, locals = {}, options = {})
-    erb template, options, locals
+    erb template, options.update(:locals => locals)
   end
   private :show
 

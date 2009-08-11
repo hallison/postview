@@ -1,0 +1,103 @@
+= Postview
+
+Just write your posts ... and view!
+
+Postview is a simple blogware written in Ruby using Sinatra DSL that
+renders files written in Markdown.
+
+* Easy to configure.
+* Easy to synchronize.
+
+Install {Ruby}[http://www.ruby-lang.org/] Gem package and try.
+
+== Getting start
+
+The Postview requires the following gems:
+
+* {Rack}[http://rack.rubyforge.org/]
+* {Rack-Test}[http://github.com/brynary/rack-test]
+* {Sinatra}[http://www.sinatrarb.com/]
+* {Sinatra-Mapping}[http://sinatra-mapping.rubyforge.org/]
+* {Maruku}[http://maruku.rubyforge.org/]
+* {Postage}[http://postage.rubyforge.org/]
+
+Install stable gem from {RubyForge.org}[http://rubyforge.org/].
+
+  $ sudo gem install postview
+
+Or, install development gem from {Github.com}[http://github.com/].
+
+  $ sudo gem install hallison-postview --source http://gems.github.com/
+
+So, run command for create and setup a new Postview directory structure.
+
+  $ postview create path/to/website
+
+After setup, run server with command:
+
+  $ RACK_ENV=production postview server
+
+NOTE: Inopportunely, Postview not run server using production environment,
+yet.
+
+In your browser, access http://localhost:9000/.
+
+== Create new post
+
+New post can be created by using the task `post`:
+
+    $ cd path/to/postview
+    $ rake post
+
+Following all instructions. Please, set environment variable +EDITOR+
+or +VISUAL+ for editing your posts. Ether else, run:
+
+    $ cd path/to/postview
+    $ EDITOR=<your favorite editor> rake post
+
+The new post will be written in drafts directory. You can pass other
+directory.
+
+    $ cd path/to/postview
+    $ rake post[path/to/other/post/directory]
+
+NOTE: New feature for creates new post from blog manager will be added.
+
+== Synchronize your posts
+
+You can synchronize your page using the synchronize tasks. For more
+information about this task, run <code>rake -D sync</code>.
+
+It's need creates and edit file placed in +/your/home/directory/.netrc+.
+The +directory+ attribute most be setted in +settings.yml+ file.
+
+Example:
+
+    # remote host
+    /remote/path/to/postview
+    `-- posts
+        |-- archive
+        `-- drafts
+    # local host
+    posts
+    |-- 20090702-foo_post_article.ruby.sinatra.git.mkd
+    |-- archive
+    |   `-- 20080702-foo_post_article.ruby.sinatra.git.mkd
+    `-- drafts
+        `-- 20090703-foo_draft_article.ruby.sinatra.git.mkd
+
+    # To synchronize posts
+    $ rake sync:posts
+    $ rake sync:posts[remote/path/to/postview/posts]
+
+    # To synchronize archive
+    $ rake sync:archive
+    $ rake sync:archive[remote/path/to/postview/posts/archive]
+
+    # To synchronize drafts
+    $ rake sync:drafts
+    $ rake sync:drafts[remote/path/to/postview/posts/drafts]
+
+    # To synchronize all
+    $ rake sync:all
+

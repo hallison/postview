@@ -1,0 +1,67 @@
+[0.7.0 - not released - Features]
+  * The project is a Gem package.
+  * Postview command for create a new directory structure.
+  * Added CLI commands.
+  * Added basic classes for version and information about project.
+  * Added basic files for versioning and informations.
+  * Updated methods and constants to path of directories.
+  * Updated default views.
+  * Support to themes using ERB.
+
+[0.6.0 - 2009-07-31 - Features and enhancements]
+  * Added task for build settings file.
+  * Added task for build rackup file.
+  * Default root path has been added in settings.
+  * Improvements in synchronize tasks.
+  * Fixes in the page keywords.
+  * All tasks have been added in the rakefile.
+
+[0.5.0 - 2009-07-21 - Features and enhancements]
+  * Task for synchronize post files has been added.
+  * New instructions in README file.
+  * Added instructions in task for new post.
+  * Fixes and updates in settings.
+  * Default values have been added in settings.
+  * All views have been improved.
+  * All views for new helper methods have been updated.
+  * All tests have been fixed.
+  * Mapping class has been removed in favour of Sinatra::Mapping extension.
+  * All methods in the application have been updated for new methods of the
+    Sinatra::Mapping extension.
+
+[0.4.0 - 2009-07-13 - Features and enhancements]
+  * Postage have been used for handle post files.
+  * Several features have been updated for use Postage.
+
+[0.3.2 - 2009-07-09 - Enhancements]
+  * Task for create new post.
+  * Task for create release package.
+
+[0.3.1 - 2009-07-09 - Features]
+  * Added individual tasks.
+  * Added default settings to fix errors.
+
+[0.3.0 - 2009-07-07 - Features]
+  * Added render wrapper method for simplified local variables in views.
+  * Support for listing drafts.
+  * Added new mapping for list all drafts.
+  * Added rescue errors in settings file not found.
+
+[0.2.0 - 2009-07-02 - Features]
+  * The helper methods were improved.
+  * Improvements in routes and settings.
+  * Added class for mapping route paths.
+  * All tests and views were fixed.
+  * Improved methods in settings class.
+  * Improved initialize method in site, finder and mapping.
+
+[0.1.0 - 2009-06-04 - Main features for alpha version]
+  * All posts are loaded from files.
+  * All attributes for a post are loaded from a file name.
+  * Support for tags, archiving and search.
+  * Support for configuration of routes and directories for posts and
+    archive.
+  * Lightweight interface.
+  * Added support for settings.
+  * Listing posts by tags and search.
+
