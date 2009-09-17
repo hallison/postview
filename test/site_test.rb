@@ -11,7 +11,7 @@ class TestSite < Test::Unit::TestCase
     @site = Postview::Settings.load.build_site
   end
 
-  must "check all attributes" do
+  should "check all attributes" do
     assert_equal 'Postview', @site.title
     assert_equal 'Post your articles', @site.subtitle
     assert_equal 'Jack Ducklet', @site.author
@@ -21,7 +21,7 @@ class TestSite < Test::Unit::TestCase
     assert_equal 'gemstone', @site.theme
   end
 
-  must "find all posts" do
+  should "find all posts" do
     posts = @site.find.all_posts
     assert_not_nil posts
     assert_equal 2, posts.size
@@ -30,32 +30,33 @@ class TestSite < Test::Unit::TestCase
     end
   end
 
-  must "find all tags" do
+  should "find all tags" do
     tags = @site.find.all_tags
     assert_not_nil tags
-    assert_equal 2, tags.size
+    assert_equal 4, tags.size
   end
 
-  must "find all archived posts" do
-    assert 2, @site.find_archived.all_posts.size
-    @site.find_archived.all_posts.collect do |post|
+  should "find all archived posts" do
+    assert 2, @site.find_in_archive.all_posts.size
+    @site.find_in_archive.all_posts.collect do |post|
       assert_match %r{\d{4}\d{4}-(\.*)\.*}, post.file.to_s
     end
   end
 
-  must "find all drafts" do
-    assert 1, @site.find_drafted.all_posts.size
-    @site.find_drafted.all_posts.collect do |draft|
+  should "find all drafts" do
+    assert 1, @site.find_in_drafts.all_posts.size
+    @site.find_in_drafts.all_posts.collect do |draft|
       assert_match %r{\d{4}\d{4}-(\.*)\.*}, draft.file.to_s
     end
   end
 
-  must "find one post" do
-    assert_not_nil @site.find.post(*%w(2009 06 02 postview))
+  should "find one post" do
+    assert_not_nil @site.find.post(*%w(2009 06 02 fourth))
   end
 
-  must "search posts" do
-    assert 2, @site.find.posts('postview').size
+  should "search posts" do
+    # TOFIX: The finder will be returns 2 posts.
+    assert 4, @site.find.posts('first third').size
   end
 
 end

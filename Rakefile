@@ -168,6 +168,10 @@ namespace :sync do
   task :all => settings.directories.keys
 end
 
+Rake::TestTask.new do |spec|
+  spec.test_files = FileList["test/*_test.rb"]
+end
+
 Dir["tasks/**.rake"].each do |task_file|
   load task_file
 end

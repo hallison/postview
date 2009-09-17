@@ -1,5 +1,5 @@
-<% unless posts.empty? %>
-<% for post in posts %>
+<% unless latest_posts.empty? %>
+<% for post in latest_posts %>
 <div class="entry">
 
   <h1><%= link_to post.title, posts_path, post %></h1> 

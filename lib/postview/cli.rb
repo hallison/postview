@@ -6,6 +6,7 @@ module CLI
   autoload :CreateCommand, 'postview/cli/create_command'
   autoload :ServerCommand, 'postview/cli/server_command'
 
+  # List all commands for CLI options.
   def self.commands
     constants.select do |constant|
       constant =~ /.Command/
@@ -14,6 +15,7 @@ module CLI
     end.sort
   end
 
+  # Run!
   def self.run(command, args)
     const_get("#{command.capitalize}Command").run(args)
   end

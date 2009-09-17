@@ -28,21 +28,36 @@ class Site
   attr_accessor :find
 
   # Finder for archived posts
-  attr_accessor :find_archived
+  attr_accessor :find_in_archive
 
   # Finder for drafted posts
-  attr_accessor :find_drafted
+  attr_accessor :find_in_drafts
 
+  # Initialize site with attributes passed by arguments.
   def initialize(attributes = {})
     attributes.instance_variables_set_to(self)
   end
 
+  # Find all tags from all posts and archived posts.
   def find_all_tags
-    (find.all_tags + find_archived.all_tags).uniq.sort
+    (find.all_tags + find_in_archive.all_tags).uniq.sort
   end
 
+  # Find a specific tag from posts and archived posts.
   def find_tag(tag)
-    find.tag(tag) || find_archived.tag(tag)
+    find.tag(tag) || find_in_archive.tag(tag)
+  end
+
+  # Find all posts tagged with a specific tag.
+  # Returns two lists: posts and archived posts.
+  def find_all_posts_tagged_with(tag)
+    [ find.all_posts_by_tag(tag), find_in_archive.all_posts_by_tag(tag) ]
+  end
+
+  # Find posts using any string values.
+  # Returns two lists: posts and archived posts.
+  def search_posts(*values)
+    [ find.posts(*values), find_in_archive.posts(*values) ]
   end
 
 end # class Site

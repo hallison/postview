@@ -5,7 +5,7 @@ require 'test/unit'
 require 'rack/test'
 require 'test/helper'
 
-class TestApplication < Test::Unit::TestCase
+class ApplicationTest < Test::Unit::TestCase
 
   include Rack::Test::Methods
 
@@ -57,9 +57,9 @@ class TestApplication < Test::Unit::TestCase
   end
 
   def test_should_return_ok_in_posts_path_with_params
-    get app.posts_path "/2009/06/02/postview_blogware" do |response|
+    get app.posts_path "/2009/06/02/fourth_article" do |response|
       assert response.ok?
-      assert_equal "http://example.org/posts/2009/06/02/postview_blogware/", last_request.url
+      assert_equal "http://example.org/posts/2009/06/02/fourth_article/", last_request.url
     end
   end
 
@@ -71,9 +71,9 @@ class TestApplication < Test::Unit::TestCase
   end
 
   def test_should_return_ok_in_tags_path_with_params
-    get app.tags_path "ruby" do |response|
+    get app.tags_path "t1" do |response|
       assert response.ok?
-      assert_equal "http://example.org/tags/ruby/", last_request.url
+      assert_equal "http://example.org/tags/t1/", last_request.url
     end
   end
 
@@ -84,9 +84,9 @@ class TestApplication < Test::Unit::TestCase
   end
 
   def test_should_return_ok_in_archive_path_with_params
-    get app.archive_path "2008/06/02/postview_blogware" do |response|
+    get app.archive_path "2008/06/02/second_article" do |response|
       assert response.ok?
-      assert_equal "http://example.org/archive/2008/06/02/postview_blogware/", last_request.url
+      assert_equal "http://example.org/archive/2008/06/02/second_article/", last_request.url
     end
   end
 
@@ -98,9 +98,9 @@ class TestApplication < Test::Unit::TestCase
   end
 
   def test_should_return_ok_in_drafts_path_with_params
-    get app.drafts_path "2009/07/30/draft_postview_blogware" do |response|
+    get app.drafts_path "2009/07/30/fifth_article" do |response|
       assert response.ok?
-      assert_equal "http://example.org/drafts/2009/07/30/draft_postview_blogware/", last_request.url
+      assert_equal "http://example.org/drafts/2009/07/30/fifth_article/", last_request.url
     end
   end
 
@@ -111,10 +111,10 @@ class TestApplication < Test::Unit::TestCase
   end
 
   def test_should_return_ok_in_search_path
-    get app.search_path, :anythink => "postview" do |response|
+    get app.search_path, :anythink => "first" do |response|
       assert response.ok?
-      assert_equal "postview", last_request.params.values.to_s
-      assert_equal "http://example.org/search/?anythink=postview", last_request.url
+      assert_equal "first", last_request.params.values.to_s
+      assert_equal "http://example.org/search/?anythink=first", last_request.url
     end
   end
 

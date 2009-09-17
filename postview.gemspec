@@ -33,5 +33,15 @@ end
   ]
   spec.rubyforge_project = spec.name
   spec.rubygems_version = "1.3.3"
+  spec.post_install_message = <<-end_message.gsub(/^[ ]{4}/,'')
+    #{'-'*78}
+    #{Postview::Version}
+
+    Thanks for use this lightweight blogware. Now, you can read your posts by
+    editing in your favorite editor.
+
+    Please, feedback in http://github.com/hallison/postview/issues.
+    #{'-'*78}
+  end_message
 end
 

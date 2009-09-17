@@ -1,12 +1,37 @@
-[0.7.0 - not released - Features]
-  * The project is a Gem package.
-  * Postview command for create a new directory structure.
-  * Added CLI commands.
-  * Added basic classes for version and information about project.
-  * Added basic files for versioning and informations.
-  * Updated methods and constants to path of directories.
-  * Updated default views.
-  * Support to themes using ERB.
+[0.8.0 - 2009-09-15 - Improvements]
+  * Added helper methods for improves all theme views source.
+  * Added core extensions.
+
+[0.7.0 - 2009-09-10 - Features, enhancements and improvements]
+  New features and enhancements for version 0.7.0.
+
+  * Features
+    * Postview is a RubyGems project.
+    * Added executable for creates new Postview blogs.
+    * Added support to themes.
+    * CLI and commands have been added in application libraries.
+
+  * Enhancements
+    * Added basic classes and files for version and information about project.
+    * Support to creates default Postview theme have been added.
+    * Default views have been updated to default theme.
+    * Added new images and logos in default theme.
+    * The helper methods have been separated from application.
+    * The method "mapping" has been renamed to "sections".
+    * Added patches for Ruby v1.8.5.
+    * Added creation of Rakefile in new Postview blogs.
+    * Fixes for new features of the Postage API.
+
+  * Improvements
+    * Updates in application class to new features of the Sinatra::Mapping.
+    * Updates in CLI commands. Need fix to load the production environment.
+    * Updated method for synchronize.
+    * Removed archive tags path.
+    * Change host attribute name.
+    * Updated methods and constants to path of directories.
+    * Updates all tests to new features.
+    * Improvements in method that creates config.ru file.
+    * Updates in the settings and site classes.
 
 [0.6.0 - 2009-07-31 - Features and enhancements]
   * Added task for build settings file.

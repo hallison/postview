@@ -7,6 +7,6 @@ test.*
 doc/*
 pkg/*
 tmp/*
-posts
+posts/*
 config/*.yml
 config/*.rb

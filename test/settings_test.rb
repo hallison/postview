@@ -46,8 +46,8 @@ class SettingsTest < Test::Unit::TestCase
   def test_should_build_site
     assert_not_nil @settings.build_site
     assert_not_nil @settings.build_site.find
-    assert_not_nil @settings.build_site.find_archived
-    assert_not_nil @settings.build_site.find_drafted
+    assert_not_nil @settings.build_site.find_in_archive
+    assert_not_nil @settings.build_site.find_in_drafts
   end
 
   def test_should_rescue_exception_and_load_defaults

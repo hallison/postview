@@ -31,7 +31,7 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
 # == Themes
 #
 # Default theme is generated in <tt>themes/default</tt>. Change or migrate your favorite
-# theme.
+# theme. To help for this, read Helpers for more informations.
 #
 module Postview
 
@@ -44,14 +44,19 @@ module Postview
   require 'ostruct'
 
   # 3rd part libraries/projects.
+  require 'rack'
   require 'sinatra/base' unless defined? ::Sinatra::Base
   require 'sinatra/mapping' unless defined? ::Sinatra::Mapping
   require 'postage' unless defined? ::Postage
 
   # Internal requires
   require 'postview/patches' if RUBY_VERSION < "1.8.7"
+  require 'postview/extensions'
 
+  # Root path for Postview source.
   ROOT = Pathname.new("#{File.dirname(__FILE__)}/..").expand_path
+
+  # Current path.
   PATH = Pathname.new(".").expand_path
 
   # Auto-load all internal requires.

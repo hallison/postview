@@ -2,7 +2,7 @@
 
 Just write your posts ... and view!
 
-Postview is a simple blogware written in Ruby using Sinatra DSL that
+Postview is a simple blogware written in Ruby using Sinatra DSL and
 renders files written in Markdown.
 
 * Easy to configure.
@@ -14,14 +14,12 @@ Install {Ruby}[http://www.ruby-lang.org/] Gem package and try.
 
 The Postview requires the following gems:
 
-* {Rack}[http://rack.rubyforge.org/]
-* {Rack-Test}[http://github.com/brynary/rack-test]
 * {Sinatra}[http://www.sinatrarb.com/]
 * {Sinatra-Mapping}[http://sinatra-mapping.rubyforge.org/]
-* {Maruku}[http://maruku.rubyforge.org/]
 * {Postage}[http://postage.rubyforge.org/]
 
-Install stable gem from {RubyForge.org}[http://rubyforge.org/].
+Install stable gem from {RubyForge.org}[http://rubyforge.org/] or
+{GemCutter.org}[http://gemcutter.org/].
 
   $ sudo gem install postview
 
@@ -33,6 +31,10 @@ So, run command for create and setup a new Postview directory structure.
 
   $ postview create path/to/website
 
+Or run using +--prompt-values+.
+
+  $ postview create --prompt-values
+
 After setup, run server with command:
 
   $ RACK_ENV=production postview server
@@ -40,7 +42,7 @@ After setup, run server with command:
 NOTE: Inopportunely, Postview not run server using production environment,
 yet.
 
-In your browser, access http://localhost:9000/.
+In your browser, access http://127.0.0.1:9000/.
 
 == Create new post
 
@@ -50,7 +52,7 @@ New post can be created by using the task `post`:
     $ rake post
 
 Following all instructions. Please, set environment variable +EDITOR+
-or +VISUAL+ for editing your posts. Ether else, run:
+or +VISUAL+ for editing your posts. Other else, run:
 
     $ cd path/to/postview
     $ EDITOR=<your favorite editor> rake post
@@ -100,4 +102,6 @@ Example:
 
     # To synchronize all
     $ rake sync:all
+
+NOTE: Will added new enhancements for this feature.
 

@@ -1,0 +1,22 @@
+<div class="entry">
+
+  <h1><%= link_to title_path(:about, site.title), :about %></h1>
+
+  <div class="text">
+
+    <%=Postview::About.to_html%>
+
+    <p>
+      <%=Postview.name%> uses the following libraries/projects:
+    </p>
+
+    <ul>
+      <li><%=link_to "#{Sinatra}", "http://www.sinatrarb.com/"%></li>
+      <li><%=link_to "#{Sinatra::Mapping}", "http://sinatra-mapping.rubyforge.org/"%></li>
+      <li><%=link_to "#{Postage}", "http://postage.rubyforge.org/"%></li>
+    </ul>
+
+  </div><!--text-->
+
+</div><!--entry-->
+
