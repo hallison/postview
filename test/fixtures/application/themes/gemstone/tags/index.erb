@@ -4,7 +4,7 @@
 
   <ul>
   <% for tag in all_tags %>
-    <li><%= link_to tag.capitalize, tags_path, tag, :title => tag.capitalize %> (<%=count_posts_by_tag(tag)%>)</li>
+    <li><%= link_to tag.capitalize, :tags, tag, :title => tag.capitalize %> (<%=count_posts_by_tag(tag)%>)</li>
   <% end %>
   </ul>
 

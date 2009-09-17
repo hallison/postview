@@ -24,6 +24,9 @@ module Helpers
   # All archived posts.
   attr_reader :all_archived_posts
 
+  # All archived posts.
+  attr_reader :all_drafted_posts
+
   # All posts found by search.
   attr_reader :posts_found
 

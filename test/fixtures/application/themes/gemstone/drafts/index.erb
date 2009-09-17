@@ -1,13 +1,13 @@
 <div class="entry">
 
-  <h1><%=title_path :archive%></h1> 
+  <h1><%=title_path :drafts%></h1> 
 
   <div class="text">
 
     <dl>
-      <% for post in all_archived_posts %>
+      <% for post in all_drafted_posts %>
       <dt>
-        <b><%=link_to "#{post.publish_date} - #{post.title}", :archive, post, :title => post.title%></b>
+        <b><%=link_to "#{post.publish_date} - #{post.title}", :posts, post%></b>
         (<%= post.tags.map{ |tag| link_to tag.capitalize, :tags, tag, :title => tag.capitalize }.join(', ') %>)
       </dt>
 

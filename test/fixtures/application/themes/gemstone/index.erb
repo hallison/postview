@@ -2,11 +2,11 @@
 <% for post in latest_posts %>
 <div class="entry">
 
-  <h1><%= link_to post.title, posts_path, post %></h1> 
+  <h1><%= link_to post.title, :posts, post %></h1> 
 
   <span class="entry-meta">
     Published at <%= post.publish_date.strftime('%A, %B %d, %Y') %>,
-    tagged with <%= post.tags.map{ |tag| link_to tag.capitalize, tags_path, tag, :title => tag.capitalize }.join(', ') %>.
+    tagged with <%= post.tags.map{ |tag| link_to tag.capitalize, :posts, tag, :title => tag.capitalize }.join(', ') %>.
   </span>
 
   <div class="text">
@@ -14,7 +14,7 @@
     <%= post.summary %>
 
     <p>
-    <%= link_to "Read more ...", posts_path, post %>
+    <%= link_to "Read more ...", :posts, post %>
     </p>
 
   </div><!--text-->

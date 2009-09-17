@@ -43,26 +43,26 @@ class Application < Sinatra::Base #:nodoc: all
   # Show all information for site.
   get root_path do
     @page.title, @page.keywords = @site.subtitle, "posts"
-    show :index, :posts_path => :posts, :archive_path => :archive, :tags_path => :tags
+    show :index
   end
 
   # Show all posts.
   get posts_path do
     @page.title, @page.keywords = title_path(:posts), @all_tags.join(' ')
-    show :"posts/index", :posts_path => :posts, :tags_path => :tags
+    show :"posts/index"
   end
 
   # Show selected post.
   get posts_path "/:year/:month/:day/:name" do |year, month, day, name|
     @current_post = @site.find.post(year, month, day, name)
     @page.title, @page.keywords = @current_post.title, @current_post.tags.join(' ')
-    show :"posts/show", :posts_path => :posts, :tags_path => :tags
+    show :"posts/show"
   end
 
   # Show all tags.
   get tags_path do
     @page.title, @page.keywords = title_path(:tags), @all_tags.join(' ')
-    show :"tags/index", :posts_path => :posts, :tags_path => :tags
+    show :"tags/index"
   end
 
   # Show all posts by selected tag.
@@ -70,46 +70,47 @@ class Application < Sinatra::Base #:nodoc: all
     @current_tag = @site.find_tag(tag)
     @posts_found, @archived_posts_found = @site.find_all_posts_tagged_with(tag)
     @page.title, @page.keywords = "#{title_path(:tags)} - #{@current_tag.capitalize}", "posts #{@current_tag}"
-    show :"tags/show", :posts_path => :posts, :archive_path => :archive, :tags_path => :tags
+    show :"tags/show"
   end
 
   # Show archives grouped by year.
   get archive_path do
     @page.title, @page.keywords = title_path(:archive), @all_tags.join(' ')
-    show :"archive/index", :archive_path => :archive, :posts_path => :archive, :tags_path => :tags
+    show :"archive/index"
   end
 
   # Show selected post in archive.
   get archive_path "/:year/:month/:day/:name" do |year, month, day, name|
     @current_post = @site.find_in_archive.post(year, month, day, name)
     @page.title, @page.keywords = @current_post.title, @current_post.tags.join(' ')
-    show :"archive/show", :posts_path => :archive, :tags_path => :tags
+    show :"archive/show"
   end
 
   # Show all drafts.
   get drafts_path do
+    @all_tags = @site.find_in_drafts.all_tags.sort
     @page.title, @page.keywords = title_path(:drafts), "drafts #{@all_tags.join(' ')}"
-    show :"posts/index", :posts_path => :drafts, :tags_path => [:drafts, :tags]
+    show :"drafts/index"
   end
 
   # Show selected drafted post.
   get drafts_path "/:year/:month/:day/:name" do |year, month, day, name|
     @current_post = @site.find_in_drafts.post(year, month, day, name)
-    @all_tags ||= @site.find_in_drafts.all_tags.sort
+    @all_tags = @site.find_in_drafts.all_tags.sort
     @page.title, @page.keywords = @current_post.title, @current_post.tags.join(' ')
-    show :"posts/show", :posts_path => :drafts, :tags_path => [:drafts, :tags]
+    show :"drafts/show"
   end
 
   # Show information site.
   get about_path do
-    show :about, :about_path => :about, :posts_path => :posts, :tags_path => :tags
+    show :about
   end
 
   # Search posts by title or match file name.
   get search_path do
     @posts_found, @archived_posts_found = @site.search_posts(*params.values)
     @page.title, @page.keywords = title_path(:search), @all_tags.join(' ')
-    show :search, :posts_path => :posts, :tags_path => :tags, :archive_path => :archive, :search_path => :search
+    show :search
   end
 
   def show(template, locals = {}, options = {})
