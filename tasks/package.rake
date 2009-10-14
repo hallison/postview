@@ -71,7 +71,7 @@ namespace :gem do
 
   file gemspec_file.to_s => gemspec.files do
     when_writing "Creating #{gemspec_file}" do
-      gemspec_file.open "w" do |spec|
+      gemspec_file.open "w+" do |spec|
         spec << gemspec.to_yaml
       end
     end
