@@ -1,6 +1,6 @@
-# Copyright (c) 2009 Hallison Batista
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
-
+# Copyright (c) 2009 Hallison Batista
+#
 # Postview - The minimalist blogware and static page generator.
 #
 # == Configuration
@@ -34,7 +34,6 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
 # theme. To help for this, read Helpers for more informations.
 #
 module Postview
-
   # RubyGems.
   require 'rubygems' unless $LOADED_FEATURES.include? 'rubygems.rb'
 
@@ -76,7 +75,7 @@ module Postview
       @path = Pathname.new(pathname).expand_path
     end
 
-    # Version
+    # Version specification loaded from +VERSION+ file.
     def version_spec
       @version_spec ||= OpenStruct.new(YAML.load_file(ROOT.join("VERSION")))
     end
@@ -98,7 +97,7 @@ module Postview
       @about_info ||= OpenStruct.new(YAML.load_file(File.join(ROOT, "ABOUT")))
     end
 
-    # About
+    # About text.
     def about
       <<-end_info.gsub(/^[ ]{6}/,'')
         #{version_summary}

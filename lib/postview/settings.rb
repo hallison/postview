@@ -3,6 +3,7 @@ module Postview
 # Copyright (c) 2009 Hallison Batista
 class Settings
 
+  # Default values that will be used for valid attributes in settings file.
   DEFAULTS = {
     :site => {
       :title     => "Postview",
@@ -34,7 +35,14 @@ class Settings
   FILE_NAME = "settings.yml"
   FILE_DIR  = "config"
 
-  attr_reader :site, :directories, :sections
+  # Site attributes
+  attr_reader :site
+
+  # Directories that be used for load files.
+  attr_reader :directories
+
+  # Section names that be used in mapping routes into application.
+  attr_reader :sections
 
   # Initialize the settings using attributes passed by arguments.
   # Only attributes valid are read. See DEFAULTS.
