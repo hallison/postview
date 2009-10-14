@@ -41,6 +41,16 @@ module CLI
       end
     end
 
+    def hidden_prompt label
+      while true
+        system "stty -echo"
+        printf "%1$s %2$s: ", " "*2, "#{label}"
+        value = $stdin.readline.chomp.strip
+        system "stty echo"
+        return value unless value.nil? || value.to_s.empty?
+      end
+    end
+
     def start process, &block
       printf "%1$s %2$s ", ">"*2, process
       if block_given?

@@ -3,8 +3,7 @@ $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/..")
 require 'lib/postview'
 require 'test/unit'
 require 'rack/test'
-require 'test/helper'
-require 'test/extensions'
+require 'test/customizations'
 
 class HelpersTest < Test::Unit::TestCase
 

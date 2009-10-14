@@ -16,7 +16,7 @@ module Version #:nodoc: all
     end
 
     def to_s
-      "#{name.sub(/::.*/,'')} v#{tag} (#{info.date.strftime('%B, %d %Y')}, #{info.cycle})"
+      "#{name.sub(/::.*/,'')} v#{tag} (#{info.date.strftime('%B %d, %Y')}, #{info.cycle})"
     end
 
   end

@@ -5,6 +5,7 @@ require 'net/ftp'
 require 'rake/testtask'
 require 'rake/packagetask'
 
+Rake::application.options.trace = true
 
 # Show text message in console.
 def banner(message)
@@ -100,7 +101,7 @@ def rsync(directory, destination = nil)
 end
 
 desc <<-end_desc.gsub(/^[ ]{2}/,'')
-  Create new post in #{settings.directory_for(:posts)}.
+  Create new post in #{settings.path_to(:posts)}.
   For edit posts, set environment variable EDITOR or VISUAL. Otherwise,
   pass editor="<your favorite editor command and arguments>".
 
@@ -176,3 +177,4 @@ Dir["tasks/**.rake"].each do |task_file|
   load task_file
 end
 
+task :default => :test

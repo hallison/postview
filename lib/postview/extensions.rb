@@ -6,3 +6,13 @@ class Array
   end
 
 end
+
+class String
+
+  # Clean all spaces, non-words and digits.
+  def clean
+    gsub(/[ \W\d]/,'').downcase
+  end
+
+end
+

@@ -7,16 +7,18 @@ class Settings
     :site => {
       :title     => "Postview",
       :subtitle  => "Post your articles",
-      :author    => "Hallison Batista",
-      :email     => "email@example.com",
+      :author    => "Postview",
+      :email     => "postview@example.com",
       :domain    => "example.com",
       :directory => "/var/www/example",
-      :theme     => "default"
+      :theme     => "default",
+      :token     => "e44257415827b00557ae5505f93e112d6158c4ba3c567aefbbff47288c6bf7cd" # Password: admin
     },
     :directories => {
       :posts   => "posts",
       :archive => "posts/archive",
-      :drafts  => "posts/drafts"
+      :drafts  => "posts/drafts",
+      :themes  => "themes"
     },
     :sections => {
       :root    => "/",
@@ -25,14 +27,14 @@ class Settings
       :archive => "/archive",
       :drafts  => "/drafts",
       :search  => "/search",
-      :about   => "/about"
+      :about   => "/about",
+      :manager => "/manager"
     }
   }
   FILE_NAME = "settings.yml"
   FILE_DIR  = "config"
-  FILE      = Postview::PATH.join(FILE_DIR, FILE_NAME)
 
-  attr_reader :site, :theme, :directories, :sections
+  attr_reader :site, :directories, :sections
 
   # Initialize the settings using attributes passed by arguments.
   # Only attributes valid are read. See DEFAULTS.
@@ -63,12 +65,12 @@ class Settings
 
   # Build a specific finder for directory.
   def build_finder_for(directory)
-    Postage::Finder.new(directory_for(directory))
+    Postage::Finder.new(path_to(directory))
   end
 
   # Load a default settings values from file placed in +config/settings.yml+.
   def self.load
-    load_file(FILE)
+    load_file(file)
   end
 
   # Load a specific settings file.
@@ -89,25 +91,25 @@ class Settings
 
   # Build settings file using DEFAULTS.
   def self.build_default_file
-    FILE.open "w+" do |file|
+    file.open "w+" do |file|
       file << DEFAULTS.to_yaml
-    end unless FILE.exist?
+    end unless file.exist?
   end
 
   # Returns settings file.
-  def file
-    FILE
+  def self.file
+    Postview::path.join(FILE_DIR, FILE_NAME)
   end
 
   # Check directory and returns file that matches with a pattern.
-  def file_names_for(directory, pattern = "**.*")
-    directory_for(directory, pattern)
+  def file_names_from(directory, pattern = "**.*")
+    path_to(directory, pattern)
   end
 
   # Returns a valid directory loaded from settings file.
-  def directory_for(name, *paths)
+  def path_to(name, *paths)
     return Pathname.new(directories[name], *paths) if directories[name].match(%r{^/.*})
-    PATH.join(directories[name], *paths)
+    Postview::path.join(directories[name], *paths)
   end
 
   # Parse all attributes to hash.

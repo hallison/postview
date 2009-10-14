@@ -21,7 +21,7 @@ class CreateCommand #:nodoc: all
     if args.first =~ /^\w.*|^\/\w.*/
       new(args.shift, args.options).run
     else
-      new(".", args.options).run
+      new(nil, args.options).run
     end
   end
 
@@ -40,7 +40,7 @@ private
     @arguments.summary_indent = "  "
     @arguments.summary_width  = 24
     @arguments.banner = <<-end_banner.gsub(/^[ ]{6}/, '')
-      #{Postview::Version}
+      #{Postview::version_summary}
 
       Usage:
         #{Postview.name.downcase} create <path>
@@ -55,21 +55,27 @@ private
     @arguments.separator ""
 
     begin
-      @arguments.parse!
+      unless @path
+        puts @arguments
+        exit 1
+      else
+        @arguments.parse!
+      end
     rescue => error
       puts error
       puts @arguments
     end
-    puts "#{Postview::Version}\n\n"
+    puts "#{Postview::version_summary}\n\n"
   end
 
   def build_settings
-    create_path
+    create_root_path
     if @options[:prompt]
       prompt_for_site_settings
       prompt_for_directories_settings
       prompt_for_sections_settings
     end
+    prompt_for_site_password
     create_settings
     create_directories
     create_default_theme
@@ -87,7 +93,7 @@ private
     end
   end
 
-  def create_path
+  def create_root_path
     start "Creating #{@path} path" do
       step { @path = Pathname.new(@path) }
       step { @path.exist? ? raise("Path #{@path} exist") : true }
@@ -131,34 +137,35 @@ private
   end
 
   def create_default_theme
-    create = lambda do |path|
-      start "Creating #{path}" do
-        step { path.exist? ? raise("Theme path #{path} exist") : true }
-        step { path.mkpath; true }
-        step { path.exist? }
-      end
+    create_path @theme
+    copy_default_theme @theme_default, @theme
+  end
+
+  def create_path(path)
+    start "Creating #{path}" do
+      step { path.exist? ? raise("Path #{path} exist") : true }
+      step { path.mkpath; true }
+      step { path.exist? }
     end
+  end
 
-    copy = lambda do |origin, destination|
-      start "Creating #{destination}" do
-        step { destination.exist? ? raise("Theme file #{destination} exist") : true }
-        step { FileUtils.copy(origin, destination); true }
-        step { destination.exist? }
-      end
-    end
-
-    create.call @theme
-
-    @theme_default.children.map do |origin|
-      if origin.directory?
-        path = @theme.join origin.basename
-        create.call path
-        origin.children.map do |file|
-          copy.call file, path.join(file.basename)
-        end
+  def copy_default_theme(origin, destination)
+    origin.children.map do |origin_path|
+      if origin_path.directory?
+        destination_path = destination.join(origin_path.basename)
+        create_path destination_path
+        copy_default_theme origin_path, destination_path
       else
-        copy.call origin, @theme.join(origin.basename)
+        copy_file origin_path, destination.join(origin_path.basename)
       end
+    end
+  end
+
+  def copy_file(origin, destination)
+    start "Creating #{destination}" do
+      step { destination.exist? ? raise("Theme file #{destination} exist") : true }
+      step { FileUtils.copy(origin, destination); true }
+      step { destination.exist? }
     end
   end
 
@@ -182,10 +189,10 @@ private
       rakefile.open("w+") do |file|
         content = []
         content << "require 'postview'\n"
+        content << "include Postview::CLI::Command\n"
         content << <<-'end_def'.gsub(/^[ ]{10}/, '')
           # Build default settings file and load.
           def settings
-            #Postview::Settings.build_default_file
             Postview::Settings.load
           end
         end_def
@@ -242,7 +249,7 @@ private
 
         content << <<-'end_task'.gsub(/^[ ]{10}/, '')
           desc <<-end_desc.gsub(/^[ ]{2}/,'')
-            Create new post in #{settings.directory_for(:posts)}.
+            Create new post in #{settings.path_to(:posts)}.
             For edit posts, set environment variable EDITOR or VISUAL. Otherwise,
             pass editor="<your favorite editor command and arguments>".
 
@@ -255,22 +262,22 @@ private
             $ rake post[other/path/for/new/post]
           end_desc
           task :post, [:directory] do |spec, args|
-            banner "New post. Type all attributes for new post.\n"
+            puts "New post. Type all attributes for new post.\n"
             path = if args.directory
                     if settings.directories.has_key? args.directory.to_sym 
-                      settings.directory_for(args.directory.to_sym)
+                      settings.path_to(args.directory.to_sym)
                     else
                       args.directory
                     end
                   else
-                    settings.directory_for(:drafts)
+                    settings.path_to(:drafts)
                   end
             post = Postage::Post.new :title        => prompt("Post title"),
                                     :publish_date => prompt("Publish date", Date.today),
                                     :tags         => prompt("Tags separated by spaces").split(' '),
                                     :filter       => :markdown,
-                                    :content      => <<-end_content.gsub(/^[ ]{29}/,'')
-                                      Tanks for use #{Postview}.
+                                    :content      => <<-end_content.gsub(/^[ ]{28}/,'')
+                                      Thanks for use #{Postview.version_summary}.
                                       Input here the content of your post.
                                     end_content
 
@@ -303,7 +310,7 @@ private
             settings.directories.keys.each do |dirname|
               desc "Synchronize #{dirname}."
               task dirname, [:destination] do |spec,args|
-                banner "Synchronize #{dirname} directory."
+                puts "Synchronize #{dirname} directory."
                 ftp(dirname, args.destination)
               end
             end
@@ -328,6 +335,15 @@ private
       site[:email]     = prompt "Email",       @settings.site[:email],   %r{.*?@.*?\..*}
       site[:domain]    = prompt "Domain",      @settings.site[:domain],  %r{.*\..*}
       site[:directory] = prompt "Directory",   @settings.site[:directory]
+      @site.update site
+    end
+  end
+
+  def prompt_for_site_password
+    init "Settings required for generate new token" do |site|
+      site[:author] = prompt "Author name", @settings.site[:author]
+      site[:domain] = prompt "Domain",      @settings.site[:domain],  %r{.*\..*}
+      site[:token]  = Postview::Site::tokenize(site[:author], hidden_prompt("Password"), site[:domain])
       @site.update site
     end
   end

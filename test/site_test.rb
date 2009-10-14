@@ -1,9 +1,8 @@
-$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/..")
+$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../")
 
 require 'lib/postview'
 require 'test/unit'
-require 'test/helper'
-require 'test/extensions'
+require 'test/customizations'
 
 class TestSite < Test::Unit::TestCase
 
@@ -18,7 +17,7 @@ class TestSite < Test::Unit::TestCase
     assert_equal 'jack.ducklet@example.com', @site.email
     assert_equal 'jackd.example.com', @site.domain
     assert_equal 'path/to/site', @site.directory
-    assert_equal 'gemstone', @site.theme
+    assert_equal 'mytheme', @site.theme
   end
 
   should "find all posts" do

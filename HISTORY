@@ -1,9 +1,35 @@
+[0.9.0 - 2009-10-14 - Features, enhancements and improvements]
+  New features, enhancements and small improvements
+
+  * Features
+    * Support for authentication has been added.
+
+  * Enhancements
+    * Added instructions for use Rack::Static to serve static theme files.
+    * Added content in error theme template file.
+    * Added marshalling content in postview.gemspec file.
+    * Added tasks for build Gemspec file.
+    * Tests have been fixed for authorization feature.
+
+  * Fixes
+    * Fixes in default theme file for render list of drafts.
+  * The application path has been fixed.
+
+  * Improvements
+    * Small improvements in code.
+
+[0.8.1 - 2009-09-17 - Updates]
+  * Added helper method for list all drafted posts.
+  * Added fixtures for tests in drafts path.
+  * Added new theme files for drafts.
+  * All unneeded path variables have been removed.
+
 [0.8.0 - 2009-09-15 - Improvements]
   * Added helper methods for improves all theme views source.
   * Added core extensions.
 
 [0.7.0 - 2009-09-10 - Features, enhancements and improvements]
-  New features and enhancements for version 0.7.0.
+  New features, enhancements and several improvements.
 
   * Features
     * Postview is a RubyGems project.

@@ -24,6 +24,9 @@ class Site
   # Theme directory name.
   attr_accessor :theme
 
+  # Token pass.
+  attr_accessor :token
+
   # Finder for posts
   attr_accessor :find
 
@@ -49,7 +52,6 @@ class Site
   end
 
   # Find all posts tagged with a specific tag.
-  # Returns two lists: posts and archived posts.
   def find_all_posts_tagged_with(tag)
     [ find.all_posts_by_tag(tag), find_in_archive.all_posts_by_tag(tag) ]
   end
@@ -58,6 +60,16 @@ class Site
   # Returns two lists: posts and archived posts.
   def search_posts(*values)
     [ find.posts(*values), find_in_archive.posts(*values) ]
+  end
+
+  # Check authentication for user.
+  def authenticate?(username, password)
+    @token == self.class.tokenize(username, password, domain)
+  end
+
+  # Generate digest token.
+  def self.tokenize(username, password, domain)
+    Digest::SHA256.hexdigest("$#{username}?#{password}@#{domain}")
   end
 
 end # class Site

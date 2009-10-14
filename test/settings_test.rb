@@ -2,7 +2,8 @@ $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/..")
 
 require 'lib/postview'
 require 'test/unit'
-require 'test/helper'
+require 'rack/test'
+require 'test/customizations'
 
 class SettingsTest < Test::Unit::TestCase
 
@@ -15,12 +16,13 @@ class SettingsTest < Test::Unit::TestCase
         :email     => "jack.ducklet@example.com",
         :domain    => "jackd.example.com",
         :directory => "path/to/site",
-        :theme     => "gemstone"
+        :theme     => "mytheme"
       },
       :directories => {
         :posts   => "posts",
         :archive => "posts/archive",
-        :drafts  => "posts/drafts"
+        :drafts  => "posts/drafts",
+        :themes  => "themes"
       },
       :sections => {
         :root    => "/",
@@ -32,6 +34,7 @@ class SettingsTest < Test::Unit::TestCase
         :about   => "about"
       }
     }
+    Postview::path = "test/fixtures/application"
     @settings = Postview::Settings.load
   end
 
@@ -66,6 +69,12 @@ class SettingsTest < Test::Unit::TestCase
         assert_not_nil settings.send(method)[key]
       end
     end
+  end
+
+  should "load theme from shared directory" do
+    site_path = Pathname.new("test/fixtures/site").expand_path
+    Postview::path = site_path.join("blog")
+    assert_equal site_path.join("themes"), Postview::Settings.load.path_to(:themes)
   end
 
 end

@@ -1,8 +1,8 @@
 --- 
+:minor: 9
 :release: 
-:cycle: Beta release
+:cycle: Beta
+:patch: 0
 :timestamp: 2009-08-24 07:46:28 -04:00
+:date: 2009-10-14
 :major: 0
-:date: 2009-09-17
-:minor: 8
-:patch: 1

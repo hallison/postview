@@ -82,6 +82,7 @@ pre {
   font: 13.34px monaco,terminus,courrier,monospace;
   color: #000;
   background-color: #DDD;
+  border: 2px solid #AAA;
 }
 
 code {

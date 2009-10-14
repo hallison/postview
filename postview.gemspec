@@ -1,47 +1,260 @@
-def manifest
-  #`git ls-files`.split.sort.reject{ |out| out =~ /^\./ || out =~ /^doc/ }
-  %w{HISTORY INFO LICENSE Rakefile README.rdoc VERSION} +
-  Dir["{bin,lib,test}/**/**.rb","test/fixtures/**/**","tasks/**/**.rake","themes/**/**"]
-end
+--- !ruby/object:Gem::Specification 
+name: postview
+version: !ruby/object:Gem::Version 
+  version: 0.9.0
+platform: ruby
+authors: 
+- Hallison Batista
+autorequire: 
+bindir: bin
+cert_chain: []
 
-@gemspec = Gem::Specification.new do |spec|
-  spec.executable = 'postview'
-  spec.platform = Gem::Platform::RUBY
-  spec.version  = Postview::Version.tag
-  spec.date     = Postview::Version.info.date
+date: 2009-09-25 00:00:00 -04:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: sinatra
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 0.9.1.1
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: sinatra-mapping
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - "="
+      - !ruby/object:Gem::Version 
+        version: 1.0.5
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: postage
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - "="
+      - !ruby/object:Gem::Version 
+        version: 0.1.4.1
+    version: 
+description: Postview is a simple blog-engine written in Ruby using the Sinatra DSL for render files written in Markdown.
+email: email@hallisonbatista.com
+executables: 
+- postview
+extensions: []
 
-  Postview::About.info.marshal_dump.each do |info, value|
-    spec.send("#{info}=", value) if spec.respond_to? "#{info}="
-  end
+extra_rdoc_files: 
+- README.rdoc
+- LICENSE
+files: 
+- ABOUT
+- HISTORY
+- LICENSE
+- Rakefile
+- VERSION
+- README.rdoc
+- bin/postview
+- lib/postview/settings.rb
+- lib/postview/cli/server_command.rb
+- lib/postview/cli/create_command.rb
+- lib/postview/version.rb
+- lib/postview/site.rb
+- lib/postview/about.rb
+- lib/postview/application.rb
+- lib/postview/patches.rb
+- lib/postview/authentication.rb
+- lib/postview/cli.rb
+- lib/postview/helpers.rb
+- lib/postview/extensions.rb
+- lib/postview.rb
+- tasks/homepage.rake
+- tasks/version.rake
+- tasks/documentation.rake
+- tasks/package.rake
+- tasks/history.rake
+- test/helper.rb
+- test/site_test.rb
+- test/helpers_test.rb
+- test/settings_test.rb
+- test/application_test.rb
+- test/extensions.rb
+- test/fixtures/application
+- test/fixtures/application/posts
+- test/fixtures/application/posts/archive
+- test/fixtures/application/posts/archive/20080602-second_article.t1.t2.mkd
+- test/fixtures/application/posts/archive/20080529-first_article.t1.mkd
+- test/fixtures/application/posts/20090602-fourth_article.t1.t2.t3.t4.mkd
+- test/fixtures/application/posts/drafts
+- test/fixtures/application/posts/drafts/20090730-fifth_article.t1.t2.t3.t4.t5.mkd
+- test/fixtures/application/posts/20090529-third_article.t1.t2.t3.mkd
+- test/fixtures/application/config
+- test/fixtures/application/config/settings.yml
+- test/fixtures/application/empty.yml
+- test/fixtures/application/themes
+- test/fixtures/application/themes/gemstone
+- test/fixtures/application/themes/gemstone/templates
+- test/fixtures/application/themes/gemstone/templates/search.erb
+- test/fixtures/application/themes/gemstone/templates/posts
+- test/fixtures/application/themes/gemstone/templates/posts/index.erb
+- test/fixtures/application/themes/gemstone/templates/posts/show.erb
+- test/fixtures/application/themes/gemstone/templates/error.erb
+- test/fixtures/application/themes/gemstone/templates/layout.erb
+- test/fixtures/application/themes/gemstone/templates/tags
+- test/fixtures/application/themes/gemstone/templates/tags/index.erb
+- test/fixtures/application/themes/gemstone/templates/tags/show.erb
+- test/fixtures/application/themes/gemstone/templates/archive
+- test/fixtures/application/themes/gemstone/templates/archive/index.erb
+- test/fixtures/application/themes/gemstone/templates/archive/show.erb
+- test/fixtures/application/themes/gemstone/templates/index.erb
+- test/fixtures/application/themes/gemstone/templates/about.erb
+- test/fixtures/application/themes/gemstone/templates/drafts
+- test/fixtures/application/themes/gemstone/templates/drafts/index.erb
+- test/fixtures/application/themes/gemstone/templates/drafts/show.erb
+- test/fixtures/application/themes/gemstone/stylesheets
+- test/fixtures/application/themes/gemstone/stylesheets/gemstone.css
+- test/fixtures/application/themes/gemstone/stylesheets/postview.css
+- test/fixtures/application/themes/gemstone/javascripts
+- test/fixtures/application/themes/gemstone/javascripts/gemstone.js
+- test/fixtures/application/themes/gemstone/images
+- test/fixtures/application/themes/gemstone/images/rack.png
+- test/fixtures/application/themes/gemstone/images/ruby.png
+- test/fixtures/application/themes/gemstone/images/trojan.com
+- test/fixtures/application/themes/gemstone/images/logo.png
+- test/fixtures/application/themes/gemstone/images/navigation-bar.gif
+- test/fixtures/application/themes/gemstone/images/banners
+- test/fixtures/application/themes/gemstone/images/banners/banner.jpg
+- test/fixtures/application/themes/gemstone/images/favicon.ico
+- test/fixtures/application/themes/gemstone/images/sinatra.png
+- test/fixtures/application/themes/gemstone/images/postview.png
+- test/fixtures/application/config.ru
+- themes/default
+- themes/default/templates
+- themes/default/templates/search.erb
+- themes/default/templates/posts
+- themes/default/templates/posts/index.erb
+- themes/default/templates/posts/show.erb
+- themes/default/templates/error.erb
+- themes/default/templates/layout.erb
+- themes/default/templates/tags
+- themes/default/templates/tags/index.erb
+- themes/default/templates/tags/show.erb
+- themes/default/templates/archive
+- themes/default/templates/archive/index.erb
+- themes/default/templates/archive/show.erb
+- themes/default/templates/index.erb
+- themes/default/templates/about.erb
+- themes/default/templates/drafts
+- themes/default/templates/drafts/index.erb
+- themes/default/templates/drafts/show.erb
+- themes/default/stylesheets
+- themes/default/stylesheets/postview.css
+- themes/default/images
+- themes/default/images/rack.png
+- themes/default/images/ruby.png
+- themes/default/images/logo.png
+- themes/default/images/navigation-bar.gif
+- themes/default/images/favicon.ico
+- themes/default/images/sinatra.png
+- themes/default/images/postview.png
+has_rdoc: true
+homepage: http://postview.rubyforge.org/
+licenses: []
 
-  Postview::About.info.dependencies.each do |name, version|
-    spec.add_dependency name, version
-  end if Postview::About.info.dependencies
+post_install_message: |
+  ------------------------------------------------------------------------------
+  Postview v0.9.0 (September 25, 2009, Beta release)
+  
+  Thanks for use this lightweight blogware. Now, you can read your posts by
+  editing in your favorite editor.
+  
+  Please, feedback in http://github.com/hallison/postview/issues.
+  ------------------------------------------------------------------------------
 
-  spec.require_paths = %w[lib]
-  spec.files = manifest
-  spec.test_files = spec.files.select{ |path| path =~ /^test\/*test\.rb/ }
+rdoc_options: 
+- --line-numbers
+- --inline-source
+- --title
+- Postview v0.9.0 (September 25, 2009, Beta release)
+- --main
+- README.rdoc
+require_paths: lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
 
-  spec.has_rdoc = true
-  spec.extra_rdoc_files = %w[README.rdoc LICENSE]
-
-  spec.rdoc_options = [
-    "--line-numbers",
-    "--inline-source",
-    "--title", Postview.name,
-    "--main", "README"
-  ]
-  spec.rubyforge_project = spec.name
-  spec.rubygems_version = "1.3.3"
-  spec.post_install_message = <<-end_message.gsub(/^[ ]{4}/,'')
-    #{'-'*78}
-    #{Postview::Version}
-
-    Thanks for use this lightweight blogware. Now, you can read your posts by
-    editing in your favorite editor.
-
-    Please, feedback in http://github.com/hallison/postview/issues.
-    #{'-'*78}
-  end_message
-end
-
+rubyforge_project: postview
+rubygems_version: 1.3.5
+signing_key: 
+specification_version: 3
+summary: Simple blog-engine that render Markdown files.
+test_files: 
+- test/helper.rb
+- test/site_test.rb
+- test/helpers_test.rb
+- test/settings_test.rb
+- test/application_test.rb
+- test/extensions.rb
+- test/fixtures/application
+- test/fixtures/application/posts
+- test/fixtures/application/posts/archive
+- test/fixtures/application/posts/archive/20080602-second_article.t1.t2.mkd
+- test/fixtures/application/posts/archive/20080529-first_article.t1.mkd
+- test/fixtures/application/posts/20090602-fourth_article.t1.t2.t3.t4.mkd
+- test/fixtures/application/posts/drafts
+- test/fixtures/application/posts/drafts/20090730-fifth_article.t1.t2.t3.t4.t5.mkd
+- test/fixtures/application/posts/20090529-third_article.t1.t2.t3.mkd
+- test/fixtures/application/config
+- test/fixtures/application/config/settings.yml
+- test/fixtures/application/empty.yml
+- test/fixtures/application/themes
+- test/fixtures/application/themes/gemstone
+- test/fixtures/application/themes/gemstone/templates
+- test/fixtures/application/themes/gemstone/templates/search.erb
+- test/fixtures/application/themes/gemstone/templates/posts
+- test/fixtures/application/themes/gemstone/templates/posts/index.erb
+- test/fixtures/application/themes/gemstone/templates/posts/show.erb
+- test/fixtures/application/themes/gemstone/templates/error.erb
+- test/fixtures/application/themes/gemstone/templates/layout.erb
+- test/fixtures/application/themes/gemstone/templates/tags
+- test/fixtures/application/themes/gemstone/templates/tags/index.erb
+- test/fixtures/application/themes/gemstone/templates/tags/show.erb
+- test/fixtures/application/themes/gemstone/templates/archive
+- test/fixtures/application/themes/gemstone/templates/archive/index.erb
+- test/fixtures/application/themes/gemstone/templates/archive/show.erb
+- test/fixtures/application/themes/gemstone/templates/index.erb
+- test/fixtures/application/themes/gemstone/templates/about.erb
+- test/fixtures/application/themes/gemstone/templates/drafts
+- test/fixtures/application/themes/gemstone/templates/drafts/index.erb
+- test/fixtures/application/themes/gemstone/templates/drafts/show.erb
+- test/fixtures/application/themes/gemstone/stylesheets
+- test/fixtures/application/themes/gemstone/stylesheets/gemstone.css
+- test/fixtures/application/themes/gemstone/stylesheets/postview.css
+- test/fixtures/application/themes/gemstone/javascripts
+- test/fixtures/application/themes/gemstone/javascripts/gemstone.js
+- test/fixtures/application/themes/gemstone/images
+- test/fixtures/application/themes/gemstone/images/rack.png
+- test/fixtures/application/themes/gemstone/images/ruby.png
+- test/fixtures/application/themes/gemstone/images/trojan.com
+- test/fixtures/application/themes/gemstone/images/logo.png
+- test/fixtures/application/themes/gemstone/images/navigation-bar.gif
+- test/fixtures/application/themes/gemstone/images/banners
+- test/fixtures/application/themes/gemstone/images/banners/banner.jpg
+- test/fixtures/application/themes/gemstone/images/favicon.ico
+- test/fixtures/application/themes/gemstone/images/sinatra.png
+- test/fixtures/application/themes/gemstone/images/postview.png
+- test/fixtures/application/config.ru

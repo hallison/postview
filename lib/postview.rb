@@ -36,7 +36,7 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
 module Postview
 
   # RubyGems.
-  require 'rubygems'
+  require 'rubygems' unless $LOADED_FEATURES.include? 'rubygems.rb'
 
   # Core requires.
   require 'optparse' 
@@ -44,7 +44,6 @@ module Postview
   require 'ostruct'
 
   # 3rd part libraries/projects.
-  require 'rack'
   require 'sinatra/base' unless defined? ::Sinatra::Base
   require 'sinatra/mapping' unless defined? ::Sinatra::Mapping
   require 'postage' unless defined? ::Postage
@@ -56,18 +55,70 @@ module Postview
   # Root path for Postview source.
   ROOT = Pathname.new("#{File.dirname(__FILE__)}/..").expand_path
 
-  # Current path.
-  PATH = Pathname.new(".").expand_path
-
   # Auto-load all internal requires.
-  autoload :About,         'postview/about'
-  autoload :Version,       'postview/version'
+  autoload :Settings,       'postview/settings'
+  autoload :Site,           'postview/site'
+  autoload :Helpers,        'postview/helpers'
+  autoload :Authentication, 'postview/authentication'
+  autoload :Application,    'postview/application'
+  autoload :CLI,            'postview/cli'
 
-  autoload :Settings,      'postview/settings'
-  autoload :Site,          'postview/site'
-  autoload :Helpers,       'postview/helpers'
-  autoload :Application,   'postview/application'
-  autoload :CLI,           'postview/cli'
+  class << self
+
+    # Current application path.
+    def path
+      @path ||= Pathname.new(Dir.pwd).expand_path
+    end
+
+    # Change current directory path for load all settings from other
+    # path.
+    def path=(pathname)
+      @path = Pathname.new(pathname).expand_path
+    end
+
+    # Version
+    def version_spec
+      @version_spec ||= OpenStruct.new(YAML.load_file(ROOT.join("VERSION")))
+    end
+
+    # Current version tag.
+    def version_tag
+      %w{major minor patch release}.map do |tag|
+        version_spec.send(tag)
+      end.compact.join(".")
+    end
+
+    # Version information.
+    def version_summary
+      "#{name.sub(/::.*/,'')} v#{version_tag} (#{version_spec.date.strftime('%B %d, %Y')}, #{version_spec.cycle})"
+    end
+
+    # About information loaded from +ABOUT+ file.
+    def about_info
+      @about_info ||= OpenStruct.new(YAML.load_file(File.join(ROOT, "ABOUT")))
+    end
+
+    # About
+    def about
+      <<-end_info.gsub(/^[ ]{6}/,'')
+        #{version_summary}
+
+        Copyright (C) #{version_spec.timestamp.year} #{about_info.authors.join(', ')}
+
+        #{about_info.description}
+  
+        For more information, please see the project homepage
+        #{about_info.homepage}. Bugs, enhancements and improvements,
+        please send message to #{about_info.email}.
+      end_info
+    end
+
+    # Render about text to HTML.
+    def about_to_html
+      Maruku.new(about).to_html
+    end
+
+  end
 
 end # module Postview
 

@@ -7,16 +7,16 @@ class Application < Sinatra::Base #:nodoc: all
 
   configure do
     set :settings, Postview::Settings.load
-    set :site,     settings.build_site
-    set :page,     settings.build_page
+    set :site, settings.build_site
+    set :page, settings.build_page
+    set :theme, settings.path_to(:themes).join(site.theme)
 
-    set :static, true
+    enable :static
+    enable :session
 
-    set :root,   Postview::PATH
-    set :public, Postview::PATH.join("public")
-    set :views,  Postview::PATH.join("themes", site.theme)
-
-    map :theme, "/"
+    set :root, Postview::path
+    set :public, root.join("public")
+    set :views, theme.join("templates")
 
     mapping settings.sections
   end
@@ -34,11 +34,7 @@ class Application < Sinatra::Base #:nodoc: all
 
   helpers Postview::Helpers
 
-  # Get theme resources
-  # TOFIX: Check security and other problems
-  get theme_path "/:resource/*.*" do |resource, file, ext|
-    send_file options.views.join(resource, "#{file}.#{ext}")
-  end
+  use Rack::Static, :urls => ["/stylesheets", "/images", "/javascripts"], :root => theme
 
   # Show all information for site.
   get root_path do
@@ -88,17 +84,23 @@ class Application < Sinatra::Base #:nodoc: all
 
   # Show all drafts.
   get drafts_path do
-    @all_tags = @site.find_in_drafts.all_tags.sort
-    @page.title, @page.keywords = title_path(:drafts), "drafts #{@all_tags.join(' ')}"
-    show :"drafts/index"
+    authenticate!
+    if authenticated?
+      @all_tags = @site.find_in_drafts.all_tags.sort
+      @page.title, @page.keywords = title_path(:drafts), "drafts #{@all_tags.join(' ')}"
+      show :"drafts/index"
+    end
   end
 
   # Show selected drafted post.
   get drafts_path "/:year/:month/:day/:name" do |year, month, day, name|
-    @current_post = @site.find_in_drafts.post(year, month, day, name)
-    @all_tags = @site.find_in_drafts.all_tags.sort
-    @page.title, @page.keywords = @current_post.title, @current_post.tags.join(' ')
-    show :"drafts/show"
+    authenticate!
+    if authenticated?
+      @current_post = @site.find_in_drafts.post(year, month, day, name)
+      @all_tags = @site.find_in_drafts.all_tags.sort
+      @page.title, @page.keywords = @current_post.title, @current_post.tags.join(' ')
+      show :"drafts/show"
+    end
   end
 
   # Show information site.
@@ -113,10 +115,21 @@ class Application < Sinatra::Base #:nodoc: all
     show :search
   end
 
+  get manager_path do
+    authenticate!
+    if authenticated?
+      @page.title, @page.keywords = title_path(:manager, :posts), @all_tags.join(' ')
+      show :"posts/index"
+    end
+  end
+
+private
+
+  include Postview::Authentication
+
   def show(template, locals = {}, options = {})
     erb template, options.update(:locals => locals)
   end
-  private :show
 
 end # class Application
 

@@ -33,6 +33,9 @@ module Helpers
   # All archived posts found by search.
   attr_reader :archived_posts_found
 
+  # HTTP status error message
+  attr_reader :error_message
+
   # Returns latest posts.
   def latest_posts(limit = 5)
     @all_posts.limit(limit) || []

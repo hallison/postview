@@ -1,0 +1,9 @@
+:summary:
+  Simple blogware that render Markdown files.
+:description:
+  Postview is a simple blogware written in Ruby using the Sinatra DSL for render files written in Markdown.
+:authors:
+  - Hallison Batista
+:email: email@hallisonbatista.com
+:homepage: http://postview.rubyforge.org/
+

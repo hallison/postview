@@ -12,7 +12,7 @@ ARGV.options do |arguments|
   arguments.summary_indent = "  "
   arguments.summary_width  = 24
   arguments.banner = <<-end_banner.gsub /^[ ]{4}/, ''
-    #{Postview::Version}
+    #{Postview::version_summary}
 
     Usage:
       #{program} <command> [options]
@@ -28,7 +28,7 @@ ARGV.options do |arguments|
   arguments.separator "Global options:"
 
   arguments.on("-h", "--help",    nil, "Show this message.")        { puts arguments }
-  arguments.on(nil,  "--version", nil, "Show version information.") { puts Postview::About }
+  arguments.on(nil,  "--version", nil, "Show version information.") { puts Postview::about }
 
   arguments.separator ""
 
