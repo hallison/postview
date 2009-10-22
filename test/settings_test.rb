@@ -34,7 +34,7 @@ class SettingsTest < Test::Unit::TestCase
         :about   => "/about"
       }
     }
-    Postview::path = "test/fixtures/application"
+    Postview::path = "test/fixtures/blog"
     @settings = Postview::Settings.load
   end
 

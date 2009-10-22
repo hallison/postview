@@ -5,16 +5,16 @@ require 'test/unit'
 require 'rack/test'
 require 'test/customizations'
 
-class ApplicationTest < Test::Unit::TestCase
+class BlogApplicationTest < Test::Unit::TestCase
 
   include Rack::Test::Methods
 
   def setup
-    Postview::path = "test/fixtures/application"
+    Postview::path = "test/fixtures/blog"
   end
 
   def app
-    @app = Postview::Application
+    @app = Postview::Application::Blog
 
     @app.set :root, "#{File.dirname(__FILE__)}/.."
     @app.set :environment, :test
