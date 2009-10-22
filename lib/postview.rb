@@ -99,7 +99,7 @@ module Postview
 
     # About text.
     def about
-      <<-end_info.gsub(/^[ ]{6}/,'')
+      <<-end_info.gsub(/^[ ]{8}/,'')
         #{version_summary}
 
         Copyright (C) #{version_spec.timestamp.year} #{about_info.authors.join(', ')}

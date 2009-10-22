@@ -20,6 +20,7 @@ class HelpersTest < Test::Unit::TestCase
   end
 
   def setup
+    Postview::path = "test/fixtures/application"
     # for helpers
     @settings = app.settings
     @site = app.site

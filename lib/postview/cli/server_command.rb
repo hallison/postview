@@ -77,17 +77,6 @@ private
       step { @server ||= "mongrel" }
       step { @options[:Host] ||= "0.0.0.0" }
       step { @options[:Port] ||= "9000" }
-      step { @path = Pathname.new(@path) }
-      step { @config = @path.join("config.ru") }
-      step do
-        unless @config.exist?
-          raise "Configuration #{@config} not found"
-        else
-          true
-        end
-      end
-      step { @source = @config.read }
-      step { @source = @source.gsub(/^require[ ]'postview'/,'') }
       step { @server = Rack::Handler::WEBrick }
     end
   end
@@ -96,12 +85,12 @@ private
   def start_server
     init "Postview starting #{@server} on #{@options[:Host]}:#{@options[:Port]}" do
       ENV['RACK_ENV'] = "production"
-      config = @config.to_s
-      @postview = eval("Rack::Builder.new{(\n#{@source}\n)}.to_app", nil, config)
-      @application = Rack::Builder.new do |application|
+      Postview::path = @path
+      puts "PATH: #{Postview::path}"
+      @postview = Rack::Builder.new do |application|
         use Rack::CommonLogger, STDOUT
         use Rack::ShowExceptions
-        run application
+        run Postview::Application
       end.to_app
     end
     @server.run(@postview, @options)

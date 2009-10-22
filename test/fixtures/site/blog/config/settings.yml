@@ -1,0 +1,24 @@
+--- 
+:directories: 
+  :themes: ../themes
+  :posts: posts
+  :archive: posts/archive
+  :drafts: posts/drafts
+:sections: 
+  :search: /search
+  :about: /about
+  :manager: /manager
+  :posts: /posts
+  :archive: /archive
+  :root: /
+  :tags: /tags
+  :drafts: /drafts
+:site: 
+  :theme: mytheme
+  :domain: jackd.example.com
+  :directory: path/to/site
+  :title: Postview
+  :email: jack.ducklet@example.com
+  :subtitle: Post your articles
+  :token: 948632a3174ea34188f1f261d26941cabd8a5a42b27577ff8e400d2cd139c6e1
+  :author: Jack Ducklet

@@ -2,11 +2,8 @@
 *.tmp
 *.html
 *.ru
-*.yml
 test.*
-doc/*
-pkg/*
+doc
+pkg
 tmp/*
 posts/*
-config/*.yml
-config/*.rb

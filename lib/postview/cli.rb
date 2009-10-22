@@ -47,6 +47,7 @@ module CLI
         printf "%1$s %2$s: ", " "*2, "#{label}"
         value = $stdin.readline.chomp.strip
         system "stty echo"
+        puts
         return value unless value.nil? || value.to_s.empty?
       end
     end
