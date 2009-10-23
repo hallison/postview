@@ -7,6 +7,7 @@ require 'test/customizations'
 class TestSite < Test::Unit::TestCase
 
   def setup
+    Postview::path = "test/fixtures/blog" 
     @site = Postview::Settings.load.build_site
   end
 

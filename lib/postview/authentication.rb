@@ -3,7 +3,7 @@ module Postview
 # Copyright (c) 2009 Hallison Batista
 module Authentication
 
-  # ...
+  # Returns a HTTP Basic authentication.
   def authentication
     @authentication ||= Rack::Auth::Basic::Request.new(request.env)
   end
@@ -16,7 +16,7 @@ module Authentication
     authentication.credentials.last
   end
 
-  # Run basic authentication.
+  # Run HTTP Basic authentication.
   def authenticate!
     headers "WWW-Authenticate" => %(Basic realm="#{@site.title}") and
     @error_message = "Not authorized\n" and throw(:halt, [401, erb(:error)]) and

@@ -11,7 +11,7 @@ class HelpersTest < Test::Unit::TestCase
   include Postview::Helpers
 
   def app
-    @app = Postview::Application
+    @app = Postview::Application::Blog
 
     @app.set :root, "#{File.dirname(__FILE__)}/.."
     @app.set :environment, :test
@@ -20,6 +20,7 @@ class HelpersTest < Test::Unit::TestCase
   end
 
   def setup
+    Postview::path = "test/fixtures/blog"
     # for helpers
     @settings = app.settings
     @site = app.site

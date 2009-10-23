@@ -6,11 +6,11 @@ rescue LoadError
 end
 
 desc "Generate RDoc API documentation."
-Rake::RDocTask.new("doc:api") do |doc|
+Rake::RDocTask.new("doc") do |doc|
   doc.title    = Postview.name
   doc.main     = %q{README.rdoc}
   doc.options  = %w{--line-numbers --show-hash}
-  doc.rdoc_dir = %q{doc/api}
+  doc.rdoc_dir = %q{doc}
   doc.rdoc_files.include %w{
     HISTORY
     LICENSE
