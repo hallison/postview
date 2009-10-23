@@ -75,15 +75,26 @@ namespace :gem do
         spec << gemspec.to_yaml
       end
     end
-    puts "Successfully built #{gemspec_file}"
+    puts "Successfully build #{gemspec_file} file"
   end
 
-  desc "Build #{gemspec_file}"
-  task :spec => [gemspec_file]
+  desc "Build gem spec file #{gemspec_file}"
+  task :spec => [gemspec_file.to_s]
 
-end
+  desc "Build gem package #{gemspec.file_name}"
+  task :build => ["gem:spec"] do
+    sh "gem build #{gemspec_file}"
+  end
 
-Rake::GemPackageTask.new gemspec do |pkg|
-  pkg.need_zip = true
+  desc "Install gem package #{gemspec.file_name}"
+  task :install => ["gem:build"] do
+    sh "gem install #{gemspec.name}-#{gemspec.version}.gem --local"
+  end
+
+  desc "Uninstall gem package #{gemspec.file_name}"
+  task :uninstall do
+    sh "gem uninstall #{gemspec.name} --version #{gemspec.version}"
+  end
+
 end
 
