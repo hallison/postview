@@ -1,3 +1,24 @@
+[0.9.2 - 2009-10-27 - Fixes]
+  Small fixes for compatibility.
+
+  * Fixes for compatibility to Ruby v1.9.x.
+  * Updates in the documentation.
+
+[0.9.1 - 2009-10-23 - Enhancements]
+  New enhancements.
+
+  * Deprecation warning message has been included in Postview::Application
+    module. The blog application is Postview::Application::Blog.
+  * The source of the main application has been placed into
+    postview/application/blog.
+  * The fixtures for test application source have been added.
+  * Small fixes in the test sources.
+  * Small fixes in tasks
+  * All documentation in classes and modules have been updated.
+  * The file `lib/postview/version.rb` has been removed. It's unneeded.
+  * Fix in task `gem:spec` to open `postview.gemspec` file
+    in writable mode for add new specifications.
+
 [0.9.0 - 2009-10-14 - Features, enhancements and improvements]
   New features, enhancements and small improvements
 

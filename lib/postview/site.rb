@@ -69,6 +69,7 @@ class Site
 
   # Generate digest token.
   def self.tokenize(username, password, domain)
+    require 'digest'
     Digest::SHA256.hexdigest("$#{username}?#{password}@#{domain}")
   end
 
