@@ -48,7 +48,7 @@ module Postview
   require 'postage' unless defined? ::Postage
 
   # Internal requires
-  require 'postview/patches' if RUBY_VERSION < "1.8.7"
+  require 'postview/compatibility' if RUBY_VERSION < "1.8.7"
   require 'postview/extensions'
 
   # Root path for Postview source.

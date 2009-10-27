@@ -1,5 +1,3 @@
-require 'rake/gempackagetask'
-
 def files
   #`git ls-files`.split.sort.reject{ |out| out =~ /^\./ || out =~ /^doc/ }
   @files ||= OpenStruct.new :documents => Dir[*%w{ABOUT HISTORY LICENSE Rakefile VERSION README.rdoc}],
@@ -86,9 +84,14 @@ namespace :gem do
     sh "gem build #{gemspec_file}"
   end
 
+  desc "Deploy gem package to GemCutter.org"
+  task :deploy do
+    sh "gem push #{gemspec.file_name}"
+  end
+
   desc "Install gem package #{gemspec.file_name}"
   task :install => ["gem:build"] do
-    sh "gem install #{gemspec.name}-#{gemspec.version}.gem --local"
+    sh "gem install #{gemspec.file_name}.gem --local"
   end
 
   desc "Uninstall gem package #{gemspec.file_name}"
