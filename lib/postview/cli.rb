@@ -9,9 +9,9 @@ module CLI
   # List all commands for CLI options.
   def self.commands
     constants.select do |constant|
-      constant =~ /.Command/
+      constant.to_s =~ /.Command/
     end.map do |constant|
-      constant.sub(/Command/,'').downcase
+      constant.to_s.sub(/Command/,'').downcase
     end.sort
   end
 
