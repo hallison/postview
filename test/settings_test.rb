@@ -62,8 +62,15 @@ class SettingsTest < Test::Unit::TestCase
     end
   end
 
-  should "rescue exception for empty file and load defaults" do
+  should "rescue exception for empty file and load defaults or incomplete values" do
     settings = Postview::Settings.load_file("#{Postview::ROOT}/test/fixtures/empty.yml")
+    @attributes.each do |method, values|
+      values.collect do |key, value|
+        assert_not_nil settings.send(method)[key]
+      end
+    end
+    settings = Postview::Settings.load_file("#{Postview::ROOT}/test/fixtures/incomplete.yml")
+
     @attributes.each do |method, values|
       values.collect do |key, value|
         assert_not_nil settings.send(method)[key]
