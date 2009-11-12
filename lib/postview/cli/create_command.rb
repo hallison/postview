@@ -1,11 +1,7 @@
-module Postview
-
-module CLI
-
 # Copying (c) 2009 Hallison Batista
-class CreateCommand #:nodoc: all
+class Postview::CLI::CreateCommand #:nodoc: all
 
-  include Command
+  include Postview::CLI::Command
 
   def initialize(path, arguments)
     @path, @arguments, @options = path, arguments, {}
@@ -32,7 +28,9 @@ private
     { :help   => [ "-h", "--help", nil,
                    "Show this message." ],
       :prompt => [ "-p", "--prompt-values", nil,
-                   "Enable ask for values." ]
+                   "Enable ask for values." ],
+      :yaml   => [ "-y", "--yaml YAML_TEXT", String,
+                   "Load all settings from input YAML text."]
     }[name]
   end
 
@@ -40,7 +38,7 @@ private
     @arguments.summary_indent = "  "
     @arguments.summary_width  = 24
     @arguments.banner = <<-end_banner.gsub(/^[ ]{6}/, '')
-      #{Postview::version_summary}
+      #{Postview.version_summary}
 
       Usage:
         #{Postview.name.downcase} create <path>
@@ -51,6 +49,9 @@ private
 
     @arguments.on(*options_for(:help))   { puts @arguments; exit 0 }
     @arguments.on(*options_for(:prompt)) { @options[:prompt] = true }
+    @arguments.on(*options_for(:yaml)) do |yaml|
+      @settings = Postview::Settings.new(YAML.load(yaml))
+    end
 
     @arguments.separator ""
 
@@ -65,7 +66,7 @@ private
       puts error
       puts @arguments
     end
-    puts "#{Postview::version_summary}\n\n"
+    puts "#{Postview.version_summary}\n\n"
   end
 
   def build_settings
@@ -85,7 +86,7 @@ private
 
   def load_default_settings
     start "Loading default settings" do
-      step { @settings      = Postview::Settings.load }
+      step { @settings    ||= Postview::Settings.load }
       step { @site          = @settings.site          }
       step { @directories   = @settings.directories   }
       step { @sections      = @settings.sections      }
@@ -103,7 +104,7 @@ private
   end
 
   def create_settings
-    file = @path.join(Settings::FILE_DIR, Settings::FILE_NAME)
+    file = @path.join(Postview::Settings::FILE_DIR, Postview::Settings::FILE_NAME)
     start "Creating #{file}" do
       step { file.dirname.mkpath; true }
       step { file.dirname.exist? }
@@ -178,7 +179,7 @@ private
         #step { rackup << "log = File.open(\"tmp/postview.log\", \"a+\")\n" }
         #step { rackup << "$stdout.reopen(log)\n" }
         #step { rackup << "$stderr.reopen(log)\n" }
-        step { rackup << "run Postview::Application\n" }
+        step { rackup << "run Postview::Application::Blog\n" }
       end
     end
   end
@@ -343,9 +344,9 @@ private
     init "Settings required for generate new token" do |site|
       site[:author] = prompt "Author name", @settings.site[:author]
       site[:domain] = prompt "Domain",      @settings.site[:domain],  %r{.*\..*}
-      site[:token]  = Postview::Site::tokenize(site[:author], hidden_prompt("Password"), site[:domain])
+      site[:token]  = Postview::Site.tokenize(site[:author], hidden_prompt("Password"), site[:domain])
       @site.update site
-    end
+    end if @settings.site[:token] == Postview::Settings::DEFAULTS[:site][:token]
   end
 
   def prompt_for_directories_settings
@@ -370,9 +371,5 @@ private
     end
   end
 
-end # class SetupCommand
-
-end # module CLI
-
-end # module Postview
+end # class Postview::CLI::SetupCommand
 

@@ -15,7 +15,7 @@ module Postview::CLI
 
   # Run!
   def self.run(command, args)
-    const_get("#{command.capitalize}Command").run(args)
+    const_get("#{command.to_s.capitalize}Command").run(args)
   end
 
   module Command #:nodoc: all
