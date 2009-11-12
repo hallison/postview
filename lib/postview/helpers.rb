@@ -1,7 +1,5 @@
-module Postview
-
 # Copyright (c) 2009 Hallison Batista
-module Helpers
+module Postview::Helpers
 
   # Site information.
   attr_reader :site
@@ -79,7 +77,5 @@ module Helpers
     @count_posts_by_tag[name]
   end
 
-end # module Helpers
-
-end # module Postview
+end # module Postview::Helpers
 

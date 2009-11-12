@@ -1,7 +1,5 @@
-module Postview
-
 # Copyright (c) 2009 Hallison Batista
-class Site
+class Postview::Site
 
   # Site title.
   attr_accessor :title
@@ -73,7 +71,5 @@ class Site
     Digest::SHA256.hexdigest("$#{username}?#{password}@#{domain}")
   end
 
-end # class Site
-
-end #module Postview
+end # class Postview::Site
 

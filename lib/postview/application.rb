@@ -1,10 +1,8 @@
-module Postview
-
 # Copyright (c) 2009 Hallison Batista
-module Application
+module Postview::Application
 
   autoload :Blog,  'postview/application/blog'
-  autoload :Setup, 'postview/application/setup'
+  autoload :Build, 'postview/application/build'
 
   def self.call(env)
     puts <<-end_msg.gsub(/^[ ]{6}/,'')
@@ -20,7 +18,5 @@ module Application
     Blog.call(env)
   end
 
-end # module Application
-
-end # module Postview
+end # module Postview::Application
 
