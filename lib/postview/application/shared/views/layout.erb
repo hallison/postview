@@ -5,9 +5,9 @@
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title><%=Postview.name%> :: <%=page.title%></title>
-  <meta name="generator"   content="<%=Postview::version_summary%>" />
+  <meta name="generator" content="<%=Postview::version_summary%>" />
   <meta name="description" content="<%=Postview::about_info.summary%>" />
-  <meta name="keywords"    content="<%=page.keywords%>" />
+  <meta name="keywords" content="<%=page.keywords%>" />
   <link rel="shortcut icon" href="<%=path_to :images, "favicon.ico"%>" />
   <link rel="stylesheet" type="text/css" href="<%=path_to :stylesheets, "postview.css"%>" />
 
@@ -15,22 +15,25 @@
 
 <body>
 
+<div id="layout">
+
 <div id="header">
 
-  <h1 class="column"><%=Postview::name%> - <%=page.title%></h1>
-  <h2 class="column"><%=Postview::version_tag%>
+  <div id="logo">
+    <a href="<%=path_to :root%>" title="Postview" class="column"><img src="<%=path_to "/images/logos/postview.png"%>" alt="Postview"/></a>
+  </div>
+
+  <h1 id="title" class="column"><%=Postview::name%> - <%=page.name%></h1>
+
+  <h2 id="version" class="column">v<%=Postview::version_tag%></h2>
 
 </div><!-- header -->
-
-<br/>
 
 <div id="content">
 
 <%=yield%>
 
 </div><!-- content -->
-
-<br/>
 
 <div id="footer">
 
@@ -39,6 +42,8 @@
   </p>
 
 </div><!-- footer -->
+
+</div><!-- layout -->
 
 </body>
 

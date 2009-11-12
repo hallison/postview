@@ -16,3 +16,12 @@ class String
 
 end
 
+class Symbol
+
+  # Check other symbol for sort methods.
+  def <=>(symbol)
+    to_s <=> symbol.to_s
+  end
+
+end
+

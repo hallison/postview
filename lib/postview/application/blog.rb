@@ -129,9 +129,5 @@ private
     erb template, options.update(:locals => locals)
   end
 
-end # class Blog
-
-end # module Application
-
-end # module Postview
+end # class Postview::Application::Blog
 
