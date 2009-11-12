@@ -1,9 +1,5 @@
-module Postview
-
-module Application
-
 # Copyright (c) 2009 Hallison Batista
-class Blog < Sinatra::Base #:nodoc: all
+class Postview::Application::Blog < Sinatra::Base #:nodoc: all
 
   register Sinatra::Mapping
 
@@ -16,7 +12,7 @@ class Blog < Sinatra::Base #:nodoc: all
     enable :static
     enable :session
 
-    set :root, Postview::path
+    set :root, Postview.path
     set :public, root.join("public")
     set :views, theme.join("templates")
 
