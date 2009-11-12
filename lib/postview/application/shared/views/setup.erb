@@ -1,0 +1,133 @@
+<h2><%=page.title%></h2>
+
+<%unless site_settings_valid? %>
+<p>
+  Please, check all attributes and try again.
+</p>
+
+<ul>
+<%errors.values.compact.each do |error|%>
+  <li><%=error%></li>
+<%end%>
+</ul>
+<%else%>
+<p>
+  The next steps will help you choose the values of the settings for your new blog.
+</p>
+<%end%>
+
+<form action="<%=path_to :build%>" method="post">
+
+  <fieldset>
+
+    <legend>Local path to blog resources and settings</legend>
+
+    <div>
+
+      <div class="field large">
+        <label for="build_path">Path</label>
+        <input type="text" id="build_path" name="build_path" value="<%=build_path%>" class="text"/>
+      </div>
+
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+
+    <legend>Site information</legend>
+
+    <div>
+
+      <div class="field">
+        <label for="site_title">Title</label>
+        <input type="text" id="site_title" name="site[title]" value="<%=settings.site[:title]%>" class="text"/>
+      </div>
+
+      <div class="field">
+        <label for="site_subtitle">Subtitle</label>
+        <input type="text" id="site_subtitle" name="site[subtitle]" value="<%=settings.site[:subtitle]%>" class="text"/>
+      </div>
+
+    </div>
+
+    <div>
+
+      <div class="field <%=:error if errors[:domain]%>" title="<%=errors[:domain]%>">
+        <label for="site_domain">Domain</label>
+        <input type="text" id="site_domain" name="site[domain]" value="<%=settings.site[:domain]%>" class="text"/>
+      </div>
+
+      <div class="field">
+        <label for="site_directory">Remote Directory</label>
+        <input type="text" id="site_directory" name="site[directory]" value="<%=settings.site[:directory]%>" class="text"/>
+      </div>
+
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+
+    <legend>Author information</legend>
+
+    <div>
+
+      <div class="field <%=:error if errors[:author]%>" title="<%=errors[:author]%>">
+        <label for="site_author">Name</label>
+        <input type="text" id="site_author" name="site[author]" value="<%=settings.site[:author]%>" class="text"/>
+      </div>
+
+      <div class="field <%=:error if errors[:email]%>" title="<%=errors[:email]%>">
+        <label for="site_email">Email</label>
+        <input type="text" id="site_email" name="site[email]" value="<%=settings.site[:email]%>" class="text"/>
+      </div>
+
+      <div class="field <%=:error if errors[:password]%>" title="<%=errors[:password]%>">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" value="" class="text"/>
+      </div>
+
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+
+    <legend>Section names for routing your paths</legend>
+
+    <div>
+    <%Postview::Settings::DEFAULTS[:sections].keys.sort.map do |attribute|%>
+      <div class="field">
+        <label for="sections_<%=attribute%>"><%=attribute.to_s.capitalize%></label>
+        <input type="text" id="sections_<%=attribute%>" name="sections[<%=attribute%>]" value="<%=settings.sections[attribute]%>" class="text"/>
+      </div>
+    <%end%>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+
+    <legend>Directories for text files and other resources</legend>
+
+    <div>
+    <%Postview::Settings::DEFAULTS[:directories].keys.sort.map do |attribute|%>
+      <div class="field">
+        <label for="directories_<%=attribute%>"><%=attribute.to_s.capitalize%></label>
+        <input type="text" id="directories_<%=attribute%>" name="directories[<%=attribute%>]" value="<%=settings.directories[attribute]%>" class="text"/>
+      </div>
+    <%end%>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+  
+    <input type="submit" value="Build" class="command"/>
+    <input type="reset" value="Defaults" class="command"/>
+
+  </fieldset>
+
+</form>
+
