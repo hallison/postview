@@ -1,15 +1,7 @@
-module Postview
-
-Application.class_eval do
-  set :environment, :production
-end
-
-module CLI
-
 # Copying (c) 2009 Hallison Batista
-class ServerCommand #:nodoc: all
+class Postview::CLI::ServerCommand #:nodoc: all
 
-  include Command
+  include Postview::CLI::Command
 
   def initialize(path, arguments)
     @path, @arguments, @options = path, arguments, {}
@@ -47,7 +39,7 @@ private
     @arguments.summary_indent = "  "
     @arguments.summary_width  = 24
     @arguments.banner = <<-end_banner.gsub(/^[ ]{6}/, '')
-      #{Postview::version_summary}
+      #{Postview.version_summary}
 
       Usage:
         #{Postview.name.downcase} server <path> [options]
@@ -68,7 +60,7 @@ private
       puts error
       puts @arguments
     end
-    puts "#{Postview::version_summary}\n\n"
+    puts "#{Postview.version_summary}\n\n"
   end
 
   def load_server
@@ -85,20 +77,16 @@ private
   def start_server
     init "Postview starting #{@server} on #{@options[:Host]}:#{@options[:Port]}" do
       ENV['RACK_ENV'] = "production"
-      Postview::path = @path
-      puts "PATH: #{Postview::path}"
+      Postview.path = @path
+      puts "PATH: #{Postview.path}"
       @postview = Rack::Builder.new do |application|
         use Rack::CommonLogger, STDOUT
         use Rack::ShowExceptions
-        run Postview::Application
+        run Postview::Application::Blog
       end.to_app
     end
     @server.run(@postview, @options)
   end
 
-end # class ServerCommand
-
-end # module CLI
-
-end # module Postview
+end # class Postview::CLI::ServerCommand
 
