@@ -46,8 +46,12 @@ class Postview::Settings
   # Only attributes valid are read. See DEFAULTS.
   def initialize(attributes = {})
     attributes.symbolize_keys.merge(DEFAULTS) do |key, value, default|
-      value.merge(default) do |attribute, content, not_empty|
-        content || not_empty
+      if value
+        value.merge(default) do |attribute, content, not_empty|
+          content || not_empty
+        end
+      else
+        default
       end
     end.instance_variables_set_to(self)
   end
