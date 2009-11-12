@@ -46,13 +46,15 @@ class Postview::Settings
   # Only attributes valid are read. See DEFAULTS.
   def initialize(attributes = {})
     attributes.symbolize_keys.merge(DEFAULTS) do |key, value, default|
-      value || default
+      value.merge(default) do |attribute, content, not_empty|
+        content || not_empty
+      end
     end.instance_variables_set_to(self)
   end
 
   # Build site using attributes found in +site+ key.
   def build_site
-    build_all_finders_for(Site.new(site))
+    build_all_finders_for(Postview::Site.new(site))
   end
 
   # Build a simple structure for pages.
@@ -104,7 +106,7 @@ class Postview::Settings
 
   # Returns settings file.
   def self.file
-    Postview::path.join(FILE_DIR, FILE_NAME)
+    Postview.path.join(FILE_DIR, FILE_NAME)
   end
 
   # Check directory and returns file that matches with a pattern.
@@ -115,7 +117,7 @@ class Postview::Settings
   # Returns a valid directory loaded from settings file.
   def path_to(name, *paths)
     return Pathname.new(directories[name], *paths) if directories[name].match(%r{^/.*})
-    Postview::path.join(directories[name], *paths)
+    Postview.path.join(directories[name], *paths)
   end
 
   # Parse all attributes to hash.

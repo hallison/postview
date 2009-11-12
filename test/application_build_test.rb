@@ -14,7 +14,7 @@ class ApplicationBuildTest < Test::Unit::TestCase
   end
 
   def app
-    @app = Postview::Application::Setup
+    @app = Postview::Application::Build
 
     @app.set :root, "#{File.dirname(__FILE__)}/.."
     @app.set :environment, :test
