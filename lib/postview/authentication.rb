@@ -1,7 +1,5 @@
-module Postview
-
 # Copyright (c) 2009 Hallison Batista
-module Authentication
+module Postview::Authentication
 
   # Returns a HTTP Basic authentication.
   def authentication
@@ -31,6 +29,4 @@ module Authentication
   end
 
 end # module Authorization
-
-end # module Postview
 

@@ -1,7 +1,5 @@
-module Postview
-
 # Copyright (c) 2009 Hallison Batista
-module CLI
+module Postview::CLI
 
   autoload :CreateCommand, 'postview/cli/create_command'
   autoload :ServerCommand, 'postview/cli/server_command'
@@ -78,7 +76,5 @@ module CLI
 
   end # module Command
 
-end # module CLI
-
-end # module Postview
+end # module Postview::CLI
 

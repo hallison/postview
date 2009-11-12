@@ -1,7 +1,5 @@
-module Postview
-
 # Copyright (c) 2009 Hallison Batista
-class Settings
+class Postview::Settings
 
   # Default values that will be used for valid attributes in settings file.
   DEFAULTS = {
@@ -128,6 +126,5 @@ class Settings
     end
   end
 
-end # class Settings
+end # class Postview::Settings
 
-end # module Postview

@@ -41,6 +41,7 @@ module Postview
   require 'optparse' 
   require 'pathname'
   require 'ostruct'
+  require 'yaml'
 
   # 3rd part libraries/projects.
   require 'sinatra/base' unless defined? ::Sinatra::Base

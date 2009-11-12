@@ -5,7 +5,7 @@ require 'test/unit'
 require 'rack/test'
 require 'test/customizations'
 
-class SetupApplicationTest < Test::Unit::TestCase
+class ApplicationBuildTest < Test::Unit::TestCase
 
   include Rack::Test::Methods
 
