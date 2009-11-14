@@ -58,7 +58,7 @@ module Postview::CLI
       end
     rescue Exception => error
       printf " error\n"
-      abort format("%1$s %2$s \n", ">"*2, error)
+      raise error.class, format("%1$s %2$s \n", ">"*2, error)
     end
 
     def init process, &block
