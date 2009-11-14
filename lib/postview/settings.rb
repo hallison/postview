@@ -1,6 +1,10 @@
 # Copyright (c) 2009 Hallison Batista
 class Postview::Settings
 
+  # Default keys that 
+  DEFAULT_SITE_KEYS = [ :title, :subtitle, :author, :email, :domain, :directory, :theme, :token ]
+  DEFAULT_DIRECTORIES_KEYS = [ :posts, :archive, :drafts, :themes ]
+  DEFAULT_SECTIONS_KEYS = [ :root, :posts, :archive, :drafts, :tags, :search, :about, :dashboard ]
   # Default values that will be used for valid attributes in settings file.
   DEFAULTS = {
     :site => {
@@ -20,14 +24,14 @@ class Postview::Settings
       :themes  => "themes"
     },
     :sections => {
-      :root    => "/",
-      :posts   => "/posts",
-      :tags    => "/tags",
-      :archive => "/archive",
-      :drafts  => "/drafts",
-      :search  => "/search",
-      :about   => "/about",
-      :manager => "/manager"
+      :root      => "/",
+      :posts     => "/posts",
+      :tags      => "/tags",
+      :archive   => "/archive",
+      :drafts    => "/drafts",
+      :search    => "/search",
+      :about     => "/about",
+      :dashboard => "/dashboard"
     }
   }
   FILE_NAME = "settings.yml"
