@@ -9,6 +9,13 @@ class ApplicationBuildTest < Test::Unit::TestCase
 
   include Rack::Test::Methods
 
+  class Postview::Application::Build
+  private
+    def build!
+      erb "builded"
+    end
+  end
+
   def setup
     Postview::path = "test/fixtures/blog"
   end
@@ -21,10 +28,11 @@ class ApplicationBuildTest < Test::Unit::TestCase
     @app
   end
 
-  should "return all settings and all posts in index" do
+  should "build new blog using defaults" do
 
-    get app.root_path do |response|
+    post app.build_path, :password => "sekret" do |response|
       assert response.ok?
+      assert_match "successfully", response.body
     end
 
   end

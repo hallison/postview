@@ -8,7 +8,7 @@
   <meta name="generator" content="<%=Postview::version_summary%>" />
   <meta name="description" content="<%=Postview::about_info.summary%>" />
   <meta name="keywords" content="<%=page.keywords%>" />
-  <link rel="shortcut icon" href="<%=path_to :images, "favicon.ico"%>" />
+  <link rel="shortcut icon" href="<%=path_to :images, "postview-icon.png"%>" />
   <link rel="stylesheet" type="text/css" href="<%=path_to :stylesheets, "postview.css"%>" />
 
 </head>
@@ -19,13 +19,13 @@
 
 <div id="header">
 
-  <div id="logo">
-    <a href="<%=path_to :root%>" title="Postview" class="column"><img src="<%=path_to "/images/logos/postview.png"%>" alt="Postview"/></a>
+  <div>
+    <h1 id="logo">
+      <a href="<%=path_to :root%>" title="Postview"><img src="<%=path_to "/images/postview-logo.png"%>" alt="Postview"/></a>
+    </h1>
+    <h1 id="title"><%=page.title%></h1>
+    <h2 id="subtitle">v<%=Postview::version_tag%></h2>
   </div>
-
-  <h1 id="title" class="column"><%=Postview::name%> - <%=page.name%></h1>
-
-  <h2 id="version" class="column">v<%=Postview::version_tag%></h2>
 
 </div><!-- header -->
 
