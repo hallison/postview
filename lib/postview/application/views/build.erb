@@ -1,6 +1,4 @@
-<h2><%=page.title%></h2>
-
-<%unless site_settings_valid? %>
+<%unless no_errors? %>
 <p>
   Please, check all attributes and try again.
 </p>
@@ -10,11 +8,18 @@
   <li><%=error%></li>
 <%end%>
 </ul>
-<%else%>
-<p>
-  The next steps will help you choose the values of the settings for your new blog.
-</p>
 <%end%>
+
+<%unless builded%>
+<p>
+  Welcome to <%=Postview.version_summary%>.
+</p>  
+
+<p>
+  Thanks for use this software application. Please, input
+  all settings for build a new blog. Remember:
+  <b>The directory path must not exist. Will created automatically.</b>
+</p>
 
 <form action="<%=path_to :build%>" method="post">
 
@@ -25,8 +30,8 @@
     <div>
 
       <div class="field large">
-        <label for="build_path">Path</label>
-        <input type="text" id="build_path" name="build_path" value="<%=build_path%>" class="text"/>
+        <label for="postview_path">Postview path</label>
+        <input type="text" id="postview_path" name="postview_path" value="<%=postview_path%>" class="text" size="60"/>
       </div>
 
     </div>
@@ -53,7 +58,7 @@
 
     <div>
 
-      <div class="field <%=:error if errors[:domain]%>" title="<%=errors[:domain]%>">
+      <div class="field <%=:error if errors.site_domain%>" title="<%=errors.site_domain%>">
         <label for="site_domain">Domain</label>
         <input type="text" id="site_domain" name="site[domain]" value="<%=settings.site[:domain]%>" class="text"/>
       </div>
@@ -73,17 +78,17 @@
 
     <div>
 
-      <div class="field <%=:error if errors[:author]%>" title="<%=errors[:author]%>">
+      <div class="field <%=:error if errors.site_author%>" title="<%=errors.site_author%>">
         <label for="site_author">Name</label>
         <input type="text" id="site_author" name="site[author]" value="<%=settings.site[:author]%>" class="text"/>
       </div>
 
-      <div class="field <%=:error if errors[:email]%>" title="<%=errors[:email]%>">
+      <div class="field <%=:error if errors.site_email%>" title="<%=errors.site_email%>">
         <label for="site_email">Email</label>
         <input type="text" id="site_email" name="site[email]" value="<%=settings.site[:email]%>" class="text"/>
       </div>
 
-      <div class="field <%=:error if errors[:password]%>" title="<%=errors[:password]%>">
+      <div class="field <%=:error if errors.password%>" title="<%=errors.password%>">
         <label for="password">Password</label>
         <input type="password" id="password" name="password" value="" class="text"/>
       </div>
@@ -130,4 +135,4 @@
   </fieldset>
 
 </form>
-
+<%end%>

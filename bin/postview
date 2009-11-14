@@ -42,8 +42,8 @@ ARGV.options do |arguments|
       arguments.parse!
     end
   rescue => error
-    puts arguments
     puts error
+    puts arguments
     exit 1
   end
 
