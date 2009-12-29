@@ -63,59 +63,49 @@ module Postview
   autoload :Application,    'postview/application'
   autoload :CLI,            'postview/cli'
 
-  class << self
 
-    # Current application path.
-    def path
-      @path ||= Pathname.new(Dir.pwd).expand_path
+  # Current application path.
+  def self.path
+    @path ||= Pathname.new(Dir.pwd).expand_path
+  end
+
+  # Change current directory path for load all settings from other
+  # path.
+  def self.path=(pathname)
+    @path = Pathname.new(pathname).expand_path
+  end
+
+  # Version
+  def self.version
+    @version ||= Version.current
+  end
+
+  class Version #:nodoc:
+
+    FILE = Postage::ROOT.join(".version")
+
+    attr_accessor :tag, :date, :milestone
+    attr_reader :timestamp
+
+    def initialize(options = {})
+      options.symbolize_keys.instance_variables_set_to(self)
     end
 
-    # Change current directory path for load all settings from other
-    # path.
-    def path=(pathname)
-      @path = Pathname.new(pathname).expand_path
+    def to_hash
+      [:tag, :date, :milestone, :timestamp].inject({}) do |hash, key|
+        hash[key] = send(key)
+        hash
+      end
     end
 
-    # Version specification loaded from +VERSION+ file.
-    def version_spec
-      @version_spec ||= OpenStruct.new(YAML.load_file(ROOT.join("VERSION")))
+    def save!
+      self.date = Date.today
+      FILE.open("w+") { |file| file << self.to_hash.to_yaml }
+      self
     end
 
-    # Current version tag.
-    def version_tag
-      %w{major minor patch release}.map do |tag|
-        version_spec.send(tag)
-      end.compact.join(".")
-    end
-
-    # Version information.
-    def version_summary
-      "#{name.sub(/::.*/,'')} v#{version_tag} (#{version_spec.date.strftime('%B %d, %Y')}, #{version_spec.cycle})"
-    end
-
-    # About information loaded from +ABOUT+ file.
-    def about_info
-      @about_info ||= OpenStruct.new(YAML.load_file(File.join(ROOT, "ABOUT")))
-    end
-
-    # About text.
-    def about
-      <<-end_info.gsub(/^[ ]{8}/,'')
-        #{version_summary}
-
-        Copyright (C) #{version_spec.timestamp.year} #{about_info.authors.join(', ')}
-
-        #{about_info.description}
-  
-        For more information, please see the project homepage
-        #{about_info.homepage}. Bugs, enhancements and improvements,
-        please send message to #{about_info.email}.
-      end_info
-    end
-
-    # Render about text to HTML.
-    def about_to_html
-      Maruku.new(about).to_html
+    def self.current
+      new(YAML.load_file(FILE))
     end
 
   end
