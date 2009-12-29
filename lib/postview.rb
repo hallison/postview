@@ -82,7 +82,7 @@ module Postview
 
   class Version #:nodoc:
 
-    FILE = Postage::ROOT.join(".version")
+    FILE = Postview::ROOT.join(".version")
 
     attr_accessor :tag, :date, :milestone
     attr_reader :timestamp
