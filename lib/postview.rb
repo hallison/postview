@@ -87,8 +87,8 @@ module Postview
     attr_accessor :tag, :date, :milestone
     attr_reader :timestamp
 
-    def initialize(options = {})
-      options.symbolize_keys.instance_variables_set_to(self)
+    def initialize(attributes = {})
+      attributes.symbolize_keys.instance_variables_set_to(self)
     end
 
     def to_hash
@@ -106,6 +106,11 @@ module Postview
 
     def self.current
       new(YAML.load_file(FILE))
+    end
+
+    def self.to_s
+      name.match /(.*?)::.*/
+      "#{$1} v#{current.tag}, #{current.date} (#{current.milestone})"
     end
 
   end
