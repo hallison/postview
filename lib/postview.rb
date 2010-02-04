@@ -1,7 +1,5 @@
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
-# Copyright (c) 2009 Hallison Batista
-#
-# Postview - The minimalist blogware and static page generator.
+# = Postview - The minimalist blogware and static page generator
 #
 # == Configuration
 #
@@ -63,24 +61,63 @@ module Postview
   autoload :Application,    'postview/application'
   autoload :CLI,            'postview/cli'
 
+  class << self
 
-  # Current application path.
-  def self.path
-    @path ||= Pathname.new(Dir.pwd).expand_path
-  end
+    # Configuration options for post class.
+    def configure(attributes = {}, &block)
+      @config = Config.new(attributes)
+      block_given? ? (yield config) : config
+    end
 
-  # Change current directory path for load all settings from other
-  # path.
-  def self.path=(pathname)
-    @path = Pathname.new(pathname).expand_path
-  end
+    # Configuration
+    def config
+      @config ||= Config.new do |default|
+        default.path = "."
+      end
+    end
 
-  # Version
-  def self.version
-    @version ||= Version.current
-  end
+    # Current version
+    def version
+      @version ||= Version.current
+    end
 
-  class Version #:nodoc:
+  end # class self
+
+  class Base #:nodoc:
+    def initialize(attributes = {})
+      attributes.each do |attribute, value|
+        send("#{attribute}=", value) if respond_to? "#{attribute}="
+      end
+    end
+  end # class Base
+
+  class Config < Base
+    # Current application path.
+    attr_reader :path
+
+    # Site attributes.
+    attr_reader :site
+
+    # Directories that be used for load files.
+    attr_reader :directories
+
+    # Section names that be used in mapping routes into application.
+    attr_reader :sections
+
+    # Criates a new configuration.
+    def initialize(attributes = {}) #:yields:config
+      super(attributes)
+      yield self if block_given?
+    end
+
+    # Change current directory path for load all settings from other
+    # path.
+    def path=(pathname)
+      @path = Pathname.new(pathname).expand_path
+    end
+  end # class Config
+
+  class Version < Base #:nodoc:
 
     FILE = Postview::ROOT.join(".version")
 
@@ -88,7 +125,8 @@ module Postview
     attr_reader :timestamp
 
     def initialize(attributes = {})
-      attributes.symbolize_keys.instance_variables_set_to(self)
+      super(attributes)
+      @timestamp = attributes[:timestamp]
     end
 
     def to_hash
