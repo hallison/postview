@@ -12,7 +12,7 @@ class Postview::Application::Blog < Sinatra::Base #:nodoc: all
     enable :static
     enable :session
 
-    set :root, Postview.path
+    set :root, Postview.config.path
     set :public, root.join("public")
     set :views, theme.join("templates")
 
@@ -113,7 +113,7 @@ class Postview::Application::Blog < Sinatra::Base #:nodoc: all
     show :search
   end
 
-  get manager_path do
+  get dashboard_path do
     authenticate!
     if authenticated?
       @page.title, @page.keywords = title_path(:manager, :posts), @all_tags.join(' ')
