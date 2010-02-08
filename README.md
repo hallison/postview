@@ -1,50 +1,48 @@
-= Postview
+Postview - A lightweight blog engine
+====================================
 
-Just write your posts ... and view!
+Postview is a simple blog engine (a.k.a. blogware) written in [Ruby][] using
+the [Sinatra][] framework and [Kramdown][] parser to renders files written in
+[Markdown][].
 
-Postview is a simple blogware written in Ruby using Sinatra DSL and
-renders files written in Markdown.
+Features
+--------
 
-* Easy to configure.
-* Easy to synchronize.
+* Easy configuration.
+* Easy synchronization.
+* No database, it's use only text files written in [Markdown][].
+* Has suport to themes.
 
-Install {Ruby}[http://www.ruby-lang.org/] Gem package and try.
+Getting started
+---------------
 
-== Getting start
+Install [Ruby][] [Gem package][postview gem] and try.
 
-The Postview requires the following gems:
+The Postview depended of the following libraries (Gems):
 
-* {Sinatra}[http://www.sinatrarb.com/]
-* {Sinatra-Mapping}[http://sinatra-mapping.rubyforge.org/]
-* {Postage}[http://postage.rubyforge.org/]
+* [Sinatra][]
+* [Sinatra-Mapping][]
+* [Postage][]
 
-Install stable gem from {RubyForge.org}[http://rubyforge.org/] or
-{GemCutter.org}[http://gemcutter.org/].
+Install stable gem from [RubyForge][] or [GemCutter.org][].
 
-  $ sudo gem install postview
+    $ sudo gem install postview
 
-Or, install development gem from {Github.com}[http://github.com/].
+Then, run command for create and setup a new Postview directory structure.
 
-  $ sudo gem install hallison-postview --source http://gems.github.com/
+    $ postview create path/to/blog
 
-So, run command for create and setup a new Postview directory structure.
+Or run using "--prompt-values":
 
-  $ postview create path/to/website
-
-Or run using +--prompt-values+.
-
-  $ postview create --prompt-values
+    $ postview create path/to/blog --prompt-values
 
 After setup, run server with command:
 
-  $ RACK_ENV=production postview server
-
-NOTE: Inopportunely, Postview not run server using production environment,
-yet.
+    $ postview server
 
 In your browser, access http://127.0.0.1:9000/.
 
-== Create new post
+### Create new post
 
 New post can be created by using the task `post`:
 
@@ -55,7 +53,7 @@ Following all instructions. Please, set environment variable +EDITOR+
 or +VISUAL+ for editing your posts. Other else, run:
 
     $ cd path/to/postview
-    $ EDITOR=<your favorite editor> rake post
+    $ EDITOR=<your-favorite-editor> rake post
 
 The new post will be written in drafts directory. You can pass other
 directory.
@@ -104,4 +102,28 @@ Example:
     $ rake sync:all
 
 NOTE: Will added new enhancements for this feature.
+
+[ruby]: http://www.ruby-lang.org 
+  "Ruby Programming Language"
+
+[sinatra]: http://www.sinatrarb.com/
+  "Sinatra - Classy web framework"
+
+[kramdown]: http://kramdown.rubyforge.org/
+  "Kramdown - Markdown superset converter"
+
+[markdown]: http://daringfireball.net/projects/markdown
+  "Markdown - The lightweight markup language"
+
+[sinatra-mapping]: http://sinatra-mapping.rubyforge.org
+  "Sinatra::Mapping - Extension to map URL paths in Sinatra"
+
+[postage]: http://postage.rubyforge.org/
+  "Postage - Postview base for parse text files"
+
+[rubyforge]: http://rubyforge.org/
+  "RubyForge.org"
+
+[gemcutter]: http://gemcutter.org/
+  "GemCutter.org"
 

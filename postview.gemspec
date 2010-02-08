@@ -176,7 +176,6 @@ Gem::Specification.new do |spec|
   #documentation
   spec.has_rdoc = true
   spec.extra_rdoc_files = [
-    "README.rdoc",
     "COPYING",
     "CHANGELOG"
   ]
@@ -194,9 +193,9 @@ Gem::Specification.new do |spec|
     #{'-'*78}
     #{Postview::Version}
 
-    Thanks for use this lightweight blogware. Now, you can read your posts by
+    Thanks for use this lightweight blog-engine. Now, you can read your posts by
     editing in your favorite editor.
-  
+
     Please, feedback in http://github.com/hallison/postview/issues.
     #{'-'*78}
   end_message

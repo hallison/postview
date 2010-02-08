@@ -1,4 +1,3 @@
-# Copying (c) 2009 Hallison Batista
 class Postview::CLI::ServerCommand #:nodoc: all
 
   include Postview::CLI::Command
@@ -39,7 +38,7 @@ private
     @arguments.summary_indent = "  "
     @arguments.summary_width  = 24
     @arguments.banner = <<-end_banner.gsub(/^[ ]{6}/, '')
-      #{Postview.version_summary}
+      #{Postview::Version}
 
       Usage:
         #{Postview.name.downcase} server <path> [options]
@@ -60,7 +59,7 @@ private
       puts error
       puts @arguments
     end
-    puts "#{Postview.version_summary}\n\n"
+    puts "#{Postview::Version}\n\n"
   end
 
   def load_server
@@ -76,9 +75,6 @@ private
   # TODO: Improve this method for run server using production environment.
   def start_server
     init "Postview starting #{@server} on #{@options[:Host]}:#{@options[:Port]}" do
-      ENV['RACK_ENV'] = "production"
-      Postview.path = @path
-      puts "PATH: #{Postview.path}"
       @postview = Rack::Builder.new do |application|
         use Rack::CommonLogger, STDOUT
         use Rack::ShowExceptions

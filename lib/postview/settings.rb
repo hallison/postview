@@ -114,7 +114,7 @@ class Postview::Settings
 
   # Returns settings file.
   def self.file
-    Postview.path.join(FILE_DIR, FILE_NAME)
+    Postview.config.path.join(FILE_DIR, FILE_NAME)
   end
 
   # Check directory and returns file that matches with a pattern.
@@ -125,7 +125,7 @@ class Postview::Settings
   # Returns a valid directory loaded from settings file.
   def path_to(name, *paths)
     return Pathname.new(directories[name], *paths) if directories[name].match(%r{^/.*})
-    Postview.path.join(directories[name], *paths)
+    Postview.config.path.join(directories[name], *paths)
   end
 
   # Parse all attributes to hash.

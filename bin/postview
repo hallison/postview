@@ -5,14 +5,13 @@ require File.expand_path(File.join(__FILE__, "..", "..", "lib", "postview"))
 
 command = ARGV.shift if Postview::CLI.commands.include? ARGV.first
 program = File.basename(__FILE__)
-ENV['RACK_ENV'] = 'production'
 
 ARGV.options do |arguments|
 
   arguments.summary_indent = "  "
   arguments.summary_width  = 24
   arguments.banner = <<-end_banner.gsub /^[ ]{4}/, ''
-    #{Postview::version_summary}
+    #{Postview::Version}
 
     Usage:
       #{program} <command> [options]
@@ -28,7 +27,7 @@ ARGV.options do |arguments|
   arguments.separator "Global options:"
 
   arguments.on("-h", "--help",    nil, "Show this message.")        { puts arguments }
-  arguments.on(nil,  "--version", nil, "Show version information.") { puts Postview::about }
+  arguments.on(nil,  "--version", nil, "Show version information.") { puts Postview::Version }
 
   arguments.separator ""
 
