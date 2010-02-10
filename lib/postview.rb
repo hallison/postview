@@ -83,12 +83,77 @@ module Postview
     end
   end # class Base
 
-  class Config < Base
-    # Current application path.
-    attr_reader :path
+  # Postview configuration class. The purpose of this class is set all
+  # values that will be shared by all classes.
+  # The configuration is based in the following attributes:
+  #
+  # [*blog*]        That set all attributes for blog.
+  # [*directories*] Set all directories for files.
+  # [*sections*]    Set all path names that will be mapped.
+  #
+  # Example:
+  #
+  #   Postview::Configuration.new do |config|
+  #     config.set :blog do |blog|
+  #       blog.title     = "Blog on duck"
+  #       blog.subtitle  = "My personal blog"
+  #       blog.author    = "Anibal Lecter"
+  #       blog.email     = "anibal@al-brainstorm.com"
+  #       blog.domain    = "al-brainstorm.com"
+  #       blog.directory = "/var/www/al-brainstorm.com"
+  #       blog.theme     = "blood-lines"
+  #     end
+  #
+  #     config.set :directories do |path|
+  #       path.posts   = "articles"
+  #       path.archive = "articles/archive"
+  #       path.drafts  = "articles/drafts"
+  #     end
+  #
+  #     config.set :sections do |section|
+  #       section.root    = ""
+  #       section.posts   = "articles"
+  #       section.drafts  = "drafts"
+  #       section.archive = "archive"
+  #     end
+  #   end
+  class Configuration < Base
 
-    # Site attributes.
-    attr_reader :site
+    # Default values.
+    DEFAULTS = {
+      :blog => {
+        :title     => "Postview",
+        :subtitle  => "Post your articles",
+        :author    => "Postview",
+        :email     => "postview@example.com",
+        :domain    => "example.com",
+        :directory => "/var/www/example",
+        :theme     => "default",
+        :token     => "e44257415827b00557ae5505f93e112d6158c4ba3c567aefbbff47288c6bf7cd" # Password: admin
+      },
+      :directories => {
+        :posts   => "posts",
+        :archive => "posts/archive",
+        :drafts  => "posts/drafts",
+        :themes  => "themes"
+      },
+      :sections => {
+        :root      => "/",
+        :posts     => "/posts",
+        :tags      => "/tags",
+        :archive   => "/archive",
+        :drafts    => "/drafts",
+        :search    => "/search",
+        :about     => "/about",
+        :dashboard => "/dashboard"
+      }
+    }
+
+    # Base path for application.
+    attr_reader :basepath
+
+    # Blog attributes.
+    attr_reader :blog
 
     # Directories that be used for load files.
     attr_reader :directories
@@ -96,18 +161,62 @@ module Postview
     # Section names that be used in mapping routes into application.
     attr_reader :sections
 
-    # Criates a new configuration.
+    # Criates a new Postview::Configuration.
     def initialize(attributes = {}) #:yields:config
-      super(attributes)
+      initialize_default_values
+      @directories.assign(attributes[:directories]) if attributes.has_key? :directories
+      @blog.assign(attributes[:blog]) if attributes.has_key? :blog
+      @sections.assign(attributes[:sections]) if attributes.has_key? :sections
       yield self if block_given?
     end
 
-    # Change current directory path for load all settings from other
-    # path.
-    def path=(pathname)
-      @path = Pathname.new(pathname).expand_path
+    # Set an attribute. See Configuration examples.
+    def set(attribute, &block)
+      send("config_#{attribute}", &block)
     end
-  end # class Config
+
+    def self.load(attributes = {})
+      new(attributes)
+    end
+
+  private
+
+    # Just initialize all attribute with default values.
+    def initialize_default_values
+      DEFAULTS.map do |attribute, defaults|
+        self.instance_variable_set("@#{attribute}", Struct.new(*defaults.keys).new)
+        method = self.instance_variable_get("@#{attribute}")
+        def method.assign(attributes)
+          attributes.map{ |method, value| self.send("#{method}=", value) }
+        end
+        method.assign(defaults)
+      end
+    end
+
+    # Configures directory paths using Pathname class.
+    def config_directories(&block)
+      yield @directories
+      @directories.members.map do |path|
+        dir = @directories.send(path)
+        @directories.send("#{path}=", Pathname.new(dir).expand_path)
+      end
+    end
+
+    # Configures the blog properties.
+    def config_blog(&block)
+      yield @blog
+    end
+
+    # Configures the section paths to map routes.
+    def config_sections(&block)
+      yield @sections
+      @sections.members.map do |name|
+        path = @sections.send(name).gsub("/","")
+        @sections.send("#{name}=", "/#{path}")
+      end
+    end
+
+  end # class Configuration
 
   class Version < Base #:nodoc:
 
