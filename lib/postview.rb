@@ -1,11 +1,18 @@
+#@ --- 
+#@ :tag: 0.10.0
+#@ :date: 2010-02-10
+#@ :milestone: Beta
+#@ :timestamp: 2009-08-24 07:46:28 -04:00
+
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
+
 # = Postview - The minimalist blogware and static page generator
 #
 # == Configuration
 #
 # After create your blog, edit <tt>config/settings.yml</tt> file.
 #
-# *site*::        Attributes for your site.
+# [*blog*]        Attributes for your site.
 #                 * *title*
 #                 * *subtitle*
 #                 * *author*
@@ -13,7 +20,7 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
 #                 * *domain* for connect by FTP.
 #                 * *directory*, remote. This attribute will be used to synchronize your posts.
 #                 * *theme*
-# *sections*::    Attributes for sections (routes) used in site.
+# [*sections*]    Attributes for sections (routes) used in site.
 #                 * *root* for main section
 #                 * *posts*
 #                 * *tags*
@@ -21,7 +28,7 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
 #                 * *drafts*
 #                 * *search*
 #                 * *about*
-# *directories*:: Attributes for paths to post files.
+# [*directories*] Attributes for paths to post files.
 #                 * *posts*
 #                 * *archive*
 #                 * *drafts*
@@ -61,28 +68,13 @@ module Postview
   autoload :Application,    'postview/application'
   autoload :CLI,            'postview/cli'
 
-  class << self
+  # Current version
+  def self.version
+    @version ||= Version.current
+  end
 
-    # Configuration options for post class.
-    def configure(attributes = {}, &block)
-      @config = Config.new(attributes)
-      block_given? ? (yield config) : config
-    end
-
-    # Configuration
-    def config
-      @config ||= Config.new do |default|
-        default.path = "."
-      end
-    end
-
-    # Current version
-    def version
-      @version ||= Version.current
-    end
-
-  end # class self
-
+  # Base object. The purpose of this object is initialize other using
+  # hash attributes.
   class Base #:nodoc:
     def initialize(attributes = {})
       attributes.each do |attribute, value|
@@ -119,7 +111,7 @@ module Postview
 
   class Version < Base #:nodoc:
 
-    FILE = Postview::ROOT.join(".version")
+    FILE = Pathname.new(__FILE__)
 
     attr_accessor :tag, :date, :milestone
     attr_reader :timestamp
@@ -137,19 +129,28 @@ module Postview
     end
 
     def save!
-      self.date = Date.today
-      FILE.open("w+") { |file| file << self.to_hash.to_yaml }
+      @date = Date.today
+      source = FILE.readlines
+      source[0..4] = self.to_hash.to_yaml.to_s.gsub(/^/, '#@ ')
+      FILE.open("w+") do |file|
+        file << source.join("")
+      end
       self
     end
 
-    def self.current
-      new(YAML.load_file(FILE))
-    end
+    class << self
+      def current
+        yaml = FILE.readlines[0..4].
+                 join("").
+                 gsub(/\#@ /,'')
+        new(YAML.load(yaml))
+      end
 
-    def self.to_s
-      name.match /(.*?)::.*/
-      "#{$1} v#{current.tag}, #{current.date} (#{current.milestone})"
-    end
+      def to_s
+        name.match /(.*?)::.*/
+        "#{$1} v#{current.tag}, #{current.date} (#{current.milestone})"
+      end
+    end # class self
 
   end
 
