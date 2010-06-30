@@ -3,16 +3,16 @@ Gem::Specification.new do |spec|
 
   #about
   spec.name = "postview"
-  spec.summary = "Postview is a simple blogware that render Markdown files."
-  spec.description = "Postview is a simple blogware written in Ruby using the Sinatra DSL for render files written in Markdown."
+  spec.summary = "Postview is a simple blog engine that render Markdown files."
+  spec.description = "Postview is a simple blog engine written in Ruby/Sinatra for render files written in Markdown."
   spec.authors = ["Hallison Batista"]
-  spec.email = "email@hallisonbatista.com"
-  spec.homepage = "http://postage.rubyforge.org/"
+  spec.email = "hallison.batista@gmail.com"
+  spec.homepage = "http://postview.rubyforge.org/"
   #
 
   #version
   spec.version = "0.10.0"
-  spec.date = "2009-10-26"
+  spec.date = "2010-02-08"
   #
 
   #dependencies
@@ -22,10 +22,11 @@ Gem::Specification.new do |spec|
 
   #manifest
   spec.files = [
+    ".version",
     "ABOUT",
     "CHANGELOG",
     "LICENSE",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "bin/postview",
     "lib/postview.rb",
@@ -52,6 +53,7 @@ Gem::Specification.new do |spec|
     "postview.gemspec",
     "test/application_blog_test.rb",
     "test/application_build_test.rb",
+    "test/config_test.rb",
     "test/customizations.rb",
     "test/fixtures/blog/config/settings.yml",
     "test/fixtures/blog/posts/20090529-third_article.t1.t2.t3.mkd",
@@ -176,7 +178,7 @@ Gem::Specification.new do |spec|
   #documentation
   spec.has_rdoc = true
   spec.extra_rdoc_files = [
-    "COPYING",
+    "LICENSE",
     "CHANGELOG"
   ]
   spec.rdoc_options = [
@@ -191,7 +193,7 @@ Gem::Specification.new do |spec|
   spec.rubyforge_project = spec.name
   spec.post_install_message = <<-end_message.gsub(/^[ ]{4}/,'')
     #{'-'*78}
-    #{Postview::Version}
+    #{spec.name} v#{spec.version} (#{spec.date})
 
     Thanks for use this lightweight blog-engine. Now, you can read your posts by
     editing in your favorite editor.

@@ -42,6 +42,27 @@ After setup, run server with command:
 
 In your browser, access http://127.0.0.1:9000/.
 
+### How it works
+
+The Postview creates a directory structure like this:
+
+    .
+    |-- config
+    |-- posts
+    |   |-- archive
+    |   `-- drafts
+    |-- public
+    |-- themes
+    |   `-- default
+    |       |-- images
+    |       |-- stylesheets
+    |       `-- templates
+    |           |-- archive
+    |           |-- drafts
+    |           |-- posts
+    |           `-- tags
+    `-- tmp
+
 ### Create new post
 
 New post can be created by using the task `post`:
@@ -63,13 +84,20 @@ directory.
 
 NOTE: New feature for creates new post from blog manager will be added.
 
-== Synchronize your posts
+Synchronize your posts
+----------------------
 
-You can synchronize your page using the synchronize tasks. For more
-information about this task, run <code>rake -D sync</code>.
+Postview use by default FTP method for synchronization. But, is possible make
+deploy using [Heroku][] and [Git][].
 
-It's need creates and edit file placed in +/your/home/directory/.netrc+.
-The +directory+ attribute most be setted in +settings.yml+ file.
+
+### FTP
+
+You can synchronize your files using the . For more information about
+this task, run <code>rake -D sync</code>.
+
+It's need creates and edit file placed in `/your/home/directory/.netrc`.
+The `directory` attribute most be setted in `settings.yml` file.
 
 Example:
 
@@ -127,3 +155,8 @@ NOTE: Will added new enhancements for this feature.
 [gemcutter]: http://gemcutter.org/
   "GemCutter.org"
 
+[heroku]: http://heroku.com
+  "Heroku"
+
+[git]: http://git-scm.com
+  "Git"
