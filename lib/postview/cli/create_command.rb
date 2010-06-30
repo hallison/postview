@@ -38,7 +38,7 @@ private
     @arguments.summary_indent = "  "
     @arguments.summary_width  = 24
     @arguments.banner = <<-end_banner.gsub(/^[ ]{6}/, '')
-      #{Postview.version_summary}
+      #{Postview::Version}
 
       Usage:
         #{Postview.name.downcase} create <path>
@@ -66,7 +66,7 @@ private
       puts error
       puts @arguments
     end
-    puts "#{Postview.version_summary}\n\n"
+    puts "#{Postview::Version}\n\n"
   end
 
   def build_settings
@@ -278,7 +278,7 @@ private
                                     :tags         => prompt("Tags separated by spaces").split(' '),
                                     :filter       => :markdown,
                                     :content      => <<-end_content.gsub(/^[ ]{28}/,'')
-                                      Thanks for use #{Postview.version_summary}.
+                                      Thanks for use #{Postview::Version}.
                                       Input here the content of your post.
                                     end_content
 

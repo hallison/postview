@@ -43,7 +43,7 @@ module Postview
   require 'rubygems' unless $LOADED_FEATURES.include? 'rubygems.rb'
 
   # Core requires.
-  require 'optparse' 
+  require 'optparse'
   require 'pathname'
   require 'ostruct'
   require 'yaml'
@@ -51,14 +51,13 @@ module Postview
   # 3rd part libraries/projects.
   require 'sinatra/base' unless defined? ::Sinatra::Base
   require 'sinatra/mapping' unless defined? ::Sinatra::Mapping
-  require 'postage' unless defined? ::Postage
 
   # Internal requires
   require 'postview/compatibility' if RUBY_VERSION < "1.8.7"
   require 'postview/extensions'
 
   # Root path for Postview source.
-  ROOT = Pathname.new("#{File.dirname(__FILE__)}/..").expand_path
+  ROOT = Pathname.new("#{File.dirname(__FILE__)}/..").expand_path.freeze
 
   # Auto-load all internal requires.
   autoload :Settings,       'postview/settings'
@@ -119,6 +118,8 @@ module Postview
   #   end
   class Configuration < Base
 
+    class EmptyError < Exception; end
+
     # Default values.
     DEFAULTS = {
       :blog => {
@@ -177,6 +178,12 @@ module Postview
 
     def self.load(attributes = {})
       new(attributes)
+    end
+
+    def self.load_file(filename)
+      yaml = YAML.load_file(filename)
+      raise EmptyError, "The file '#{filename}' is empty." unless yaml
+      load(yaml)
     end
 
   private
