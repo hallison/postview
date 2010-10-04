@@ -3,9 +3,8 @@
 module Test::Unit
   # Used to fix a minor minitest/unit incompatibility in flexmock
   AssertionFailedError = Class.new(StandardError)
-  
+
   class TestCase
-   
     def self.should(description, &block)
       test_name = "test_#{description.gsub(/\s+/,'_')}".to_sym
       defined = instance_method(test_name) rescue false
@@ -18,7 +17,6 @@ module Test::Unit
         end
       end
     end
- 
   end
 end
 
