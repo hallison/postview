@@ -2,6 +2,7 @@
 *.gem
 *.html
 *.tmp
+*.tag
 *.ru
 test.*
 doc/*
