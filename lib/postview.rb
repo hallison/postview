@@ -122,7 +122,7 @@ module Postview
 
     # Default values.
     DEFAULTS = {
-      :blog => {
+      :site => {
         :title     => "Postview",
         :subtitle  => "Post your articles",
         :author    => "Postview",
@@ -134,7 +134,6 @@ module Postview
       },
       :directories => {
         :posts   => "posts",
-        :archive => "posts/archive",
         :drafts  => "posts/drafts",
         :themes  => "themes"
       },
@@ -153,73 +152,67 @@ module Postview
     # Base path for application.
     attr_reader :basepath
 
-    # Blog attributes.
-    attr_reader :blog
+    # Criates a new Postview::Configuration.
+    def initialize(&block) #:yields:config
+      initialize_default_values
+      yield self
+    end
 
-    # Directories that be used for load files.
-    attr_reader :directories
+    # Configures directory paths. Directories that be used for load files.
+    def directories
+      return @directories unless block_given?
+      yield @directories
+      @directories.members.map do |path|
+        @directories[path] = Pathname.new(@directories[path]).expand_path
+      end
+    end
+    alias :directory_for :directories
+
+    # Configures the site attributes.
+    def site(&block)
+      return @site unless block_given?
+      yield @site
+    end
 
     # Section names that be used in mapping routes into application.
-    attr_reader :sections
-
-    # Criates a new Postview::Configuration.
-    def initialize(attributes = {}) #:yields:config
-      initialize_default_values
-      @directories.assign(attributes[:directories]) if attributes.has_key? :directories
-      @blog.assign(attributes[:blog]) if attributes.has_key? :blog
-      @sections.assign(attributes[:sections]) if attributes.has_key? :sections
-      yield self if block_given?
+    # Configures the section paths to map routes.
+    def sections(&block)
+      return @sections unless block_given?
+      yield @sections
+      root = @sections.root
+      @sections.members.map do |name|
+        @sections[name] = "/#{root}/#{@sections[name]}".squeeze("/")
+      end
+      @sections.root = "/#{root}".squeeze("/")
+      @sections
     end
-
-    # Set an attribute. See Configuration examples.
-    def set(attribute, &block)
-      send("config_#{attribute}", &block)
-    end
+    alias :url_for :sections
 
     def self.load(attributes = {})
-      new(attributes)
+      new do |config|
+        config.directories.setup(attributes[:directories]) if attributes.has_key? :directories
+        config.site.setup(attributes[:site]) if attributes.has_key? :site
+        config.sections.setup(attributes[:sections]) if attributes.has_key? :sections
+      end
     end
 
     def self.load_file(filename)
       yaml = YAML.load_file(filename)
-      raise EmptyError, "The file '#{filename}' is empty." unless yaml
+      raise EmptyError, "The file '#{filename}' is empty or not exist." unless yaml
       load(yaml)
     end
 
   private
 
-    # Just initialize all attribute with default values.
+    # Just initialize all attributes with default values.
     def initialize_default_values
-      DEFAULTS.map do |attribute, defaults|
-        self.instance_variable_set("@#{attribute}", Struct.new(*defaults.keys).new)
-        method = self.instance_variable_get("@#{attribute}")
-        def method.assign(attributes)
-          attributes.map{ |method, value| self.send("#{method}=", value) }
+      DEFAULTS.map do |property, defaults|
+        self.instance_variable_set("@#{property}", Struct.new(*defaults.keys).new)
+        attribute = self.instance_variable_get("@#{property}")
+        def attribute.setup(attributes)
+          attributes.map{ |member, value| self[member] = value }
         end
-        method.assign(defaults)
-      end
-    end
-
-    # Configures directory paths using Pathname class.
-    def config_directories(&block)
-      yield @directories
-      @directories.members.map do |path|
-        dir = @directories.send(path)
-        @directories.send("#{path}=", Pathname.new(dir).expand_path)
-      end
-    end
-
-    # Configures the blog properties.
-    def config_blog(&block)
-      yield @blog
-    end
-
-    # Configures the section paths to map routes.
-    def config_sections(&block)
-      yield @sections
-      @sections.members.map do |name|
-        path = @sections.send(name).gsub("/","")
-        @sections.send("#{name}=", "/#{path}")
+        attribute.setup(defaults)
       end
     end
 
@@ -227,7 +220,7 @@ module Postview
 
   class Version < Base #:nodoc:
 
-    FILE = Pathname.new(__FILE__)
+    FILE = Pathname.new(__FILE__).freeze
 
     attr_accessor :tag, :date, :milestone
     attr_reader :timestamp
