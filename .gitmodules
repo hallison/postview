@@ -1,0 +1,3 @@
+[submodule "wappit"]
+	path = lib/postview/application/share/stylesheets/wappit
+	url = git@github.com:hallison/wappit.git
